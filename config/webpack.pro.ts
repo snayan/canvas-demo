@@ -2,14 +2,14 @@ import * as webpack from 'webpack';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import { resolveByRootDir, resolveExpamleDir } from '../script/util';
 
-let examples = resolveExpamleDir().reduce((examplesObj, subDir) => {
-  examplesObj[subDir.join('/')] = resolveByRootDir(...subDir, 'index.ts');
-  return examplesObj;
-}, {});
+// let examples = resolveExpamleDir().reduce((examplesObj, subDir) => {
+//   examplesObj[subDir.join('/')] = resolveByRootDir(...subDir, 'index.ts');
+//   return examplesObj;
+// }, {});
 
 const config: webpack.Configuration = {
   mode: 'production',
-  entry: { index: resolveByRootDir('index.ts'), ...examples },
+  entry: resolveByRootDir('index.ts'),
   output: {
     path: resolveByRootDir('dist'),
     filename: '[name].[chunkhash].js',
@@ -27,10 +27,13 @@ const config: webpack.Configuration = {
   },
   plugins: [
     new webpack.EnvironmentPlugin(['NODE_ENV']),
+    new webpack.DefinePlugin({
+      ExampleModules: JSON.stringify(resolveExpamleDir()),
+    }),
     new HtmlWebpackPlugin({
       title: 'canvas demo',
-      chunks: ['index'],
     }),
+    new webpack.HashedModuleIdsPlugin()
   ],
 };
 

@@ -7,7 +7,7 @@ export function resolveByRootDir(...paths: string[]) {
 
 export function resolveExpamleDir() {
   let example = resolveByRootDir('example');
-  return fs.readdirSync(example).map((v) => ['example', v]);
+  return fs.readdirSync(example);
 }
 
 export function createIndex() {

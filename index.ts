@@ -12,17 +12,15 @@ function getQuery() {
   return query;
 }
 
-function createScriptDom(src) {
-  let script = document.createElement('script');
-  script.src = src;
-  return script;
-}
+const ExampleModules: string[] = (<any>window).ExampleModules;
 
-function loadScript() {
+function loadExampleModule() {
   let query = getQuery();
-  let src = query ? query.module : 'index';
-  let script = createScriptDom(src);
-  document.body.appendChild(script);
+  let modules = query && query.module ? [query.module] : ExampleModules;
 }
 
-loadScript();
+function main() {
+  console.log();
+}
+
+main();

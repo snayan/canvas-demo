@@ -4,5 +4,7 @@
     "target": "es5",
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true
-  }
+  },
+  "include": ["config/**/*", "scripts/**/*"],
+  "exclude": ["index.ts", "example/**/*"]
 }
