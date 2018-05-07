@@ -1,21 +1,21 @@
 import * as webpack from 'webpack';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
-import { resolveByRootDir, resolveExpamleDir } from '../script/util';
+import { resolveByRootDir, exampleEntry } from '../script/util';
 
-// let examples = resolveExpamleDir().reduce((examplesObj, subDir) => {
-//   examplesObj[subDir.join('/')] = resolveByRootDir(...subDir, 'index.ts');
-//   return examplesObj;
-// }, {});
+let { entry, variable } = exampleEntry();
+let mainEntry = { ...entry };
+let indexEntry = `index.${Date.now()}`;
+mainEntry[indexEntry] = resolveByRootDir('index.ts');
 
 const config: webpack.Configuration = {
   mode: 'production',
-  entry: resolveByRootDir('index.ts'),
+  entry: mainEntry,
   output: {
     path: resolveByRootDir('dist'),
-    filename: '[name].[chunkhash].js',
+    filename: '[name].js',
   },
   resolve: {
-    modules: [resolveByRootDir('example'), 'node_modules'],
+    modules: [resolveByRootDir('example'), resolveByRootDir('common'), 'node_modules'],
     alias: {
       '@': resolveByRootDir(),
     },
@@ -28,12 +28,13 @@ const config: webpack.Configuration = {
   plugins: [
     new webpack.EnvironmentPlugin(['NODE_ENV']),
     new webpack.DefinePlugin({
-      ExampleModules: JSON.stringify(resolveExpamleDir()),
+      'process.env.ExampleModules': JSON.stringify(variable),
     }),
     new HtmlWebpackPlugin({
       title: 'canvas demo',
+      chunks: [indexEntry],
     }),
-    new webpack.HashedModuleIdsPlugin()
+    new webpack.HashedModuleIdsPlugin(),
   ],
 };
 

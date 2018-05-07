@@ -12,15 +12,23 @@ function getQuery() {
   return query;
 }
 
-const ExampleModules: string[] = (<any>window).ExampleModules;
+function success() {
+  console.log('load module success');
+}
 
-function loadExampleModule() {
-  let query = getQuery();
-  let modules = query && query.module ? [query.module] : ExampleModules;
+function fail() {
+  console.log('load module fail');
 }
 
 function main() {
-  console.log();
+  let query = getQuery();
+  let example = query.module || 'main';
+  let script = document.createElement('script');
+  script.onload = success;
+  script.onerror = fail;
+  script.src = process.env.ExampleModules[example];
+  document.body.appendChild(script);
 }
 
+/* 主函数 */
 main();
