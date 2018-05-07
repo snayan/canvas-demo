@@ -1,5 +1,6 @@
 import * as webpack from 'webpack';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
+import CleanWebpackPlugin from 'clean-webpack-plugin';
 import { resolveByRootDir, exampleEntry } from '../script/util';
 
 let { entry, variable } = exampleEntry();
@@ -26,6 +27,7 @@ const config: webpack.Configuration = {
     minimize: true,
   },
   plugins: [
+    new CleanWebpackPlugin(['dist'], { root: resolveByRootDir() }),
     new webpack.EnvironmentPlugin(['NODE_ENV']),
     new webpack.DefinePlugin({
       'process.env.ExampleModules': JSON.stringify(variable),

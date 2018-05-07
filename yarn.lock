@@ -6,6 +6,12 @@
   version "3.4.30"
   resolved "https://registry.yarnpkg.com/@types/clean-css/-/clean-css-3.4.30.tgz#0052c136f5248002428e3638b37de4a39818641d"
 
+"@types/clean-webpack-plugin@^0.1.2":
+  version "0.1.2"
+  resolved "https://registry.yarnpkg.com/@types/clean-webpack-plugin/-/clean-webpack-plugin-0.1.2.tgz#f3c9d97dd397a9db86ba6b9b245ca0eedf88f3b2"
+  dependencies:
+    "@types/webpack" "*"
+
 "@types/html-minifier@*":
   version "3.5.2"
   resolved "https://registry.yarnpkg.com/@types/html-minifier/-/html-minifier-3.5.2.tgz#f897a13d847a774e9b6fd91497e9b0e0ead71c35"
@@ -391,6 +397,12 @@ clean-css@4.1.x:
   resolved "https://registry.yarnpkg.com/clean-css/-/clean-css-4.1.11.tgz#2ecdf145aba38f54740f26cefd0ff3e03e125d6a"
   dependencies:
     source-map "0.5.x"
+
+clean-webpack-plugin@^0.1.19:
+  version "0.1.19"
+  resolved "https://registry.yarnpkg.com/clean-webpack-plugin/-/clean-webpack-plugin-0.1.19.tgz#ceda8bb96b00fe168e9b080272960d20fdcadd6d"
+  dependencies:
+    rimraf "^2.6.1"
 
 cli-cursor@^2.1.0:
   version "2.1.0"
