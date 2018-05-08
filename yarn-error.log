@@ -1,5 +1,5 @@
 Arguments: 
-  /usr/local/bin/node /usr/local/bin/yarn add webpcak-merge
+  /usr/local/bin/node /usr/local/bin/yarn build
 
 PATH: 
   /usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/go/bin
@@ -46,6 +46,7 @@ npm manifest:
       "@types/ora": "^1.3.4",
       "@types/webpack": "^4.1.4",
       "@types/webpack-dev-server": "^2.9.4",
+      "@types/webpack-merge": "^4.1.3",
       "chalk": "^2.4.1",
       "clean-webpack-plugin": "^0.1.19",
       "html-webpack-plugin": "^3.2.0",
@@ -56,7 +57,8 @@ npm manifest:
       "tsconfig-paths": "^3.3.1",
       "typescript": "^2.8.3",
       "webpack": "^4.6.0",
-      "webpack-dev-server": "^3.1.4"
+      "webpack-dev-server": "^3.1.4",
+      "webpack-merge": "^4.1.2"
     }
   }
 
@@ -174,6 +176,12 @@ Lockfile:
       "@types/http-proxy-middleware" "*"
       "@types/serve-static" "*"
       "@types/spdy" "*"
+      "@types/webpack" "*"
+  
+  "@types/webpack-merge@^4.1.3":
+    version "4.1.3"
+    resolved "https://registry.yarnpkg.com/@types/webpack-merge/-/webpack-merge-4.1.3.tgz#e6af0f2a0f20a86ac83d7da84a2e454063121ad4"
+    dependencies:
       "@types/webpack" "*"
   
   "@types/webpack@*", "@types/webpack@^4.1.4":
@@ -3676,6 +3684,12 @@ Lockfile:
       loglevelnext "^1.0.1"
       uuid "^3.1.0"
   
+  webpack-merge@^4.1.2:
+    version "4.1.2"
+    resolved "https://registry.yarnpkg.com/webpack-merge/-/webpack-merge-4.1.2.tgz#5d372dddd3e1e5f8874f5bf5a8e929db09feb216"
+    dependencies:
+      lodash "^4.17.5"
+  
   webpack-sources@^1.0.1, webpack-sources@^1.1.0:
     version "1.1.0"
     resolved "https://registry.yarnpkg.com/webpack-sources/-/webpack-sources-1.1.0.tgz#a101ebae59d6507354d71d8013950a3a8b7a5a54"
@@ -3799,11 +3813,17 @@ Lockfile:
     resolved "https://registry.yarnpkg.com/yn/-/yn-2.0.0.tgz#e5adabc8acf408f6385fc76495684c88e6af689a"
 
 Trace: 
-  Error: Couldn't find package "webpcak-merge" on the "npm" registry.
-      at new MessageError (/usr/local/lib/node_modules/yarn/lib/cli.js:186:110)
-      at NpmResolver.<anonymous> (/usr/local/lib/node_modules/yarn/lib/cli.js:51625:15)
-      at Generator.next (<anonymous>)
-      at step (/usr/local/lib/node_modules/yarn/lib/cli.js:98:30)
-      at /usr/local/lib/node_modules/yarn/lib/cli.js:109:13
-      at <anonymous>
-      at process._tickCallback (internal/process/next_tick.js:188:7)
+  Error: Command failed.
+  Exit code: 1
+  Command: sh
+  Arguments: -c ts-node --project tsconfig.webpack.json script/build.ts
+  Directory: /Users/yang.zhang/Documents/github/canvas-demo
+  Output:
+  
+      at ProcessTermError.MessageError (/usr/local/lib/node_modules/yarn/lib/cli.js:186:110)
+      at new ProcessTermError (/usr/local/lib/node_modules/yarn/lib/cli.js:226:113)
+      at ChildProcess.<anonymous> (/usr/local/lib/node_modules/yarn/lib/cli.js:30281:17)
+      at emitTwo (events.js:126:13)
+      at ChildProcess.emit (events.js:214:7)
+      at maybeClose (internal/child_process.js:925:16)
+      at Process.ChildProcess._handle.onexit (internal/child_process.js:209:5)

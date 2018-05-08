@@ -20,7 +20,11 @@ let serverConfig: webpackDevServer.Configuration = {
   historyApiFallback: true,
   inline: true,
   open: true,
-  overlay: true,
+  overlay: {
+    warnings: true,
+    errors: true,
+  },
+  hot: true,
   port: 8080,
   host: 'localhost',
   quiet: true,
@@ -52,17 +56,27 @@ portfinder
       }
       let message = stats.toString({
         colors: true,
+        hash: false,
+        timings: false,
+        performance: false,
+        version: false,
+        assets: false,
+        entrypoints: false,
         modules: false,
-        children: true,
+        children: false,
         chunks: false,
         chunkModules: false,
+        warnings: true,
+        errors: true,
       });
       if (stats.hasErrors()) {
-        console.log(chalk.red(message) + '\n\n');
+        console.log(chalk.red('compile error occur:\n'));
+        console.log(message + '\n\n');
         return;
       }
       if (stats.hasWarnings()) {
-        console.log(chalk.yellow(message) + '\n\n');
+        console.log(chalk.red('compile warn occur:\n'));
+        console.log(message + '\n\n');
       }
       console.log(chalk.green(`application is running here:`, url));
     });

@@ -29,15 +29,6 @@ export function exampleEntry() {
   };
 }
 
-export function createIndex() {
-  let index = resolveByRootDir('index.ts');
-  fs.access(index, fs.constants.R_OK | fs.constants.W_OK, (err: NodeJS.ErrnoException) => {
-    if (err) {
-      throw err;
-    }
-  });
-}
-
 export function clearConsole() {
   process.stdout.write(process.platform === 'win32' ? '\x1B[2J\x1B[0f' : '\x1B[2J\x1B[3J\x1B[H');
 }
