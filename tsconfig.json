@@ -3,6 +3,14 @@
     "module": "ES6",
     "target": "ES6",
     "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true
+    "allowSyntheticDefaultImports": true,
+    "experimentalDecorators": true,
+    "typeRoots": ["../node_modules/@types"],
+    "moduleResolution": "node",
+    "baseUrl": ".", // all paths are relative to the baseUrl
+    "paths": {
+      "common": ["common/index.ts"],
+      "@/*": ["example/*.ts", "example/*/index.ts"]
+    }
   }
 }

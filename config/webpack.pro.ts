@@ -14,13 +14,16 @@ const config: webpack.Configuration = {
   output: {
     path: resolveByRootDir('dist'),
     filename: '[name].js',
+    publicPath: '/',
   },
   resolve: {
     modules: [resolveByRootDir('example'), resolveByRootDir('common'), 'node_modules'],
     alias: {
-      '@': resolveByRootDir(),
+      '@': resolveByRootDir('example'),
+      commom: resolveByRootDir('common'),
     },
   },
+  devtool: 'source-map',
   target: 'web',
   optimization: {
     splitChunks: {},

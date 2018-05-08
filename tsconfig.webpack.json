@@ -2,9 +2,11 @@
   "compilerOptions": {
     "module": "commonjs",
     "target": "es5",
+    "allowJs": true,
     "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true
+    "allowSyntheticDefaultImports": true,
+    "typeRoots": ["./node_modules/@types"],
+    "moduleResolution": "node"
   },
-  "include": ["config/**/*", "scripts/**/*"],
-  "exclude": ["index.ts", "example/**/*"]
+  "include": ["config/**/*", "scripts/**/*"]
 }

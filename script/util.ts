@@ -1,5 +1,7 @@
 import * as path from 'path';
 import * as fs from 'fs';
+import * as opn from 'opn';
+import childProcess from 'child_process';
 
 export function resolveByRootDir(...paths: string[]) {
   return path.resolve(__dirname, '../', ...paths);
@@ -34,4 +36,17 @@ export function createIndex() {
       throw err;
     }
   });
+}
+
+export function clearConsole() {
+  process.stdout.write(process.platform === 'win32' ? '\x1B[2J\x1B[0f' : '\x1B[2J\x1B[3J\x1B[H');
+}
+
+export function openBrowser(url) {
+  try {
+    var options = { app: undefined };
+    opn(url, options).catch(() => {});
+  } catch (err) {
+    return false;
+  }
 }
