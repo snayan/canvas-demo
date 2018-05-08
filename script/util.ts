@@ -1,6 +1,6 @@
-import * as path from 'path';
-import * as fs from 'fs';
-import * as opn from 'opn';
+import  path from 'path';
+import  fs from 'fs';
+import  opn from 'opn';
 import childProcess from 'child_process';
 
 export function resolveByRootDir(...paths: string[]) {

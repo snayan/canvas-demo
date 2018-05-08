@@ -1,46 +1,17 @@
-import * as webpack from 'webpack';
-import HtmlWebpackPlugin from 'html-webpack-plugin';
+import webpack from 'webpack';
+import merge from 'webpack-merge';
 import CleanWebpackPlugin from 'clean-webpack-plugin';
-import { resolveByRootDir, exampleEntry } from '../script/util';
-
-let { entry, variable } = exampleEntry();
-let mainEntry = { ...entry };
-let indexEntry = `index.${Date.now()}`;
-mainEntry[indexEntry] = resolveByRootDir('index.ts');
+import { resolveByRootDir } from '../script/util';
+import baseConfig from './webpack.base';
 
 const config: webpack.Configuration = {
   mode: 'production',
-  entry: mainEntry,
-  output: {
-    path: resolveByRootDir('dist'),
-    filename: '[name].js',
-    publicPath: '/',
-  },
-  resolve: {
-    modules: [resolveByRootDir('example'), resolveByRootDir('common'), 'node_modules'],
-    alias: {
-      '@': resolveByRootDir('example'),
-      commom: resolveByRootDir('common'),
-    },
-  },
   devtool: 'source-map',
-  target: 'web',
   optimization: {
     splitChunks: {},
     minimize: true,
   },
-  plugins: [
-    new CleanWebpackPlugin(['dist'], { root: resolveByRootDir() }),
-    new webpack.EnvironmentPlugin(['NODE_ENV']),
-    new webpack.DefinePlugin({
-      'process.env.ExampleModules': JSON.stringify(variable),
-    }),
-    new HtmlWebpackPlugin({
-      title: 'canvas demo',
-      chunks: [indexEntry],
-    }),
-    new webpack.HashedModuleIdsPlugin(),
-  ],
+  plugins: [new CleanWebpackPlugin(['dist'], { root: resolveByRootDir() })],
 };
 
-export default config;
+export default merge(baseConfig, config);

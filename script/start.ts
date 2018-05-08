@@ -1,9 +1,9 @@
-import * as process from 'process';
-import * as webpack from 'webpack';
-import * as webpackDevServer from 'webpack-dev-server';
-import * as portfinder from 'portfinder';
-import * as chalk from 'chalk';
-import * as ora from 'ora';
+import process from 'process';
+import webpack from 'webpack';
+import webpackDevServer from 'webpack-dev-server';
+import portfinder from 'portfinder';
+import chalk from 'chalk';
+import ora from 'ora';
 import config from '../config/webpack.dev';
 import { clearConsole, openBrowser } from './util';
 
@@ -11,7 +11,7 @@ const isInteractive = process.stdout.isTTY;
 
 process.env.NODE_ENV = 'development';
 
-let spinner = new ora.default();
+let spinner = new ora();
 spinner.start('start server\n');
 
 let serverConfig: webpackDevServer.Configuration = {
@@ -31,7 +31,7 @@ portfinder
   .getPortPromise({ port: serverConfig.port, host: serverConfig.host })
   .then((port: number) => {
     let url = `http://${serverConfig.host}:${port}`;
-    let compiler = webpack.default(config);
+    let compiler = webpack(config);
 
     // "invalid" event fires when you have changed a file, and Webpack is
     // recompiling a bundle. WebpackDevServer takes care to pause serving the
@@ -58,15 +58,15 @@ portfinder
         chunkModules: false,
       });
       if (stats.hasErrors()) {
-        console.log(chalk.default.red(message) + '\n\n');
+        console.log(chalk.red(message) + '\n\n');
         return;
       }
       if (stats.hasWarnings()) {
-        console.log(chalk.default.yellow(message) + '\n\n');
+        console.log(chalk.yellow(message) + '\n\n');
       }
-      console.log(chalk.default.green(`application is running here:`, url));
+      console.log(chalk.green(`application is running here:`, url));
     });
-    let server = new webpackDevServer.default(compiler, serverConfig);
+    let server = new webpackDevServer(compiler, serverConfig);
 
     server.listen(port, serverConfig.host, (err) => {
       spinner.stop();

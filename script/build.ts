@@ -1,14 +1,14 @@
-import * as process from 'process';
-import * as webpack from 'webpack';
-import * as ora from 'ora';
+import process from 'process';
+import webpack from 'webpack';
+import ora from 'ora';
 import config from '../config/webpack.pro';
 
 process.env.NODE_ENV = 'production';
 
-let spinner = new ora.default();
+let spinner = new ora();
 spinner.start('start build\n');
 
-webpack.default(config, (error: Error, stats: webpack.Stats) => {
+webpack(config, (error: Error, stats: webpack.Stats) => {
   spinner.stop();
   if (error) {
     throw error;
