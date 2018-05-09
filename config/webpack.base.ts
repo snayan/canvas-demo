@@ -1,6 +1,5 @@
 import webpack from 'webpack';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
-import CleanWebpackPlugin from 'clean-webpack-plugin';
 import { resolveByRootDir, exampleEntry } from '../script/util';
 
 let { entry, variable } = exampleEntry();
