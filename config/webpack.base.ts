@@ -16,11 +16,22 @@ const config: webpack.Configuration = {
     publicPath: '/',
   },
   resolve: {
+    extensions: ['.ts', '.js'],
     modules: [resolveByRootDir('example'), resolveByRootDir('common'), 'node_modules'],
     alias: {
       '@': resolveByRootDir('example'),
-      commom: resolveByRootDir('common'),
+      'common': resolveByRootDir('common'),
     },
+  },
+  module: {
+    rules: [
+      {
+        test: /\.ts$/,
+        loader: 'ts-loader',
+        include: [resolveByRootDir('index.ts'), resolveByRootDir('example'), resolveByRootDir('common')],
+        exclude: /node_modules/,
+      },
+    ],
   },
   target: 'web',
   plugins: [
