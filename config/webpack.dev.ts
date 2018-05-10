@@ -9,6 +9,7 @@ const config: webpack.Configuration = {
     splitChunks: false,
     minimize: false,
   },
+  plugins: [new webpack.HotModuleReplacementPlugin(), new webpack.NamedModulesPlugin()],
 };
 
 export default merge(baseConfig, config);

@@ -12,7 +12,6 @@ class CommonRender {
     this.demo = demo;
     this.el = document.createElement('div');
     this.isSignleModule = isSignleModule(demo);
-    this.render();
   }
   private renderToHtml() {
     if (this.isSignleModule) {

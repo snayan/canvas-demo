@@ -19,7 +19,7 @@ const config: webpack.Configuration = {
     modules: [resolveByRootDir('example'), resolveByRootDir('common'), 'node_modules'],
     alias: {
       '@': resolveByRootDir('example'),
-      'common': resolveByRootDir('common'),
+      common: resolveByRootDir('common'),
     },
   },
   module: {
@@ -33,6 +33,12 @@ const config: webpack.Configuration = {
     ],
   },
   target: 'web',
+  stats: {
+    assets: true,
+    colors: true,
+    errors: true,
+    warnings: true,
+  },
   plugins: [
     new webpack.EnvironmentPlugin(['NODE_ENV']),
     new webpack.DefinePlugin({

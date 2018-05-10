@@ -1,7 +1,7 @@
-import  path from 'path';
-import  fs from 'fs';
-import  opn from 'opn';
-import childProcess from 'child_process';
+import path from 'path';
+import fs from 'fs';
+import opn from 'opn';
+import webpack from 'webpack';
 
 export function resolveByRootDir(...paths: string[]) {
   return path.resolve(__dirname, '../', ...paths);
@@ -37,7 +37,26 @@ export function openBrowser(url) {
   try {
     var options = { app: undefined };
     opn(url, options).catch(() => {});
+    return true;
   } catch (err) {
     return false;
   }
+}
+
+export function formatMessage(stats: webpack.Stats) {
+  return stats.toString({
+    colors: true,
+    hash: false,
+    timings: false,
+    performance: false,
+    version: false,
+    assets: false,
+    entrypoints: false,
+    modules: false,
+    children: false,
+    chunks: false,
+    chunkModules: false,
+    warnings: true,
+    errors: true,
+  });
 }

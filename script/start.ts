@@ -5,7 +5,7 @@ import portfinder from 'portfinder';
 import chalk from 'chalk';
 import ora from 'ora';
 import config from '../config/webpack.dev';
-import { clearConsole, openBrowser } from './util';
+import { clearConsole, openBrowser, formatMessage } from './util';
 
 const isInteractive = process.stdout.isTTY;
 
@@ -31,6 +31,8 @@ let serverConfig: webpackDevServer.Configuration = {
   ...config.devServer,
 };
 
+webpackDevServer.addDevServerEntrypoints(config, serverConfig);
+
 portfinder
   .getPortPromise({ port: serverConfig.port, host: serverConfig.host })
   .then((port: number) => {
@@ -54,21 +56,7 @@ portfinder
       if (isInteractive) {
         clearConsole();
       }
-      let message = stats.toString({
-        colors: true,
-        hash: false,
-        timings: false,
-        performance: false,
-        version: false,
-        assets: false,
-        entrypoints: false,
-        modules: false,
-        children: false,
-        chunks: false,
-        chunkModules: false,
-        warnings: true,
-        errors: true,
-      });
+      let message = formatMessage(stats);
       if (stats.hasErrors()) {
         console.log(chalk.red('compile error occur:\n'));
         console.log(message + '\n\n');
@@ -79,6 +67,10 @@ portfinder
         console.log(message + '\n\n');
       }
       console.log(chalk.green(`application is running here:`, url));
+    });
+    compiler.hooks.run.tap('run', (compilation) => {
+      let message = formatMessage(compilation.getStats());
+      process.stdout.write(message + '\n\n');
     });
     let server = new webpackDevServer(compiler, serverConfig);
 
