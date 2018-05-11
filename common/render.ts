@@ -3,23 +3,24 @@
 import Canvas from './canvas';
 import { isSignleModule } from './util';
 
-class CommonRender {
+abstract class CommonRender {
   public isSignleModule: boolean;
-  public canvas: Canvas;
   public el: HTMLDivElement;
-  public demo: string;
-  constructor(demo: string) {
-    this.demo = demo;
+  public moduleName: string;
+  public abstract canvas: Canvas;
+  constructor(moduleName: string) {
+    this.moduleName = moduleName;
     this.el = document.createElement('div');
-    this.isSignleModule = isSignleModule(demo);
+    this.isSignleModule = isSignleModule(moduleName);
   }
   private renderToHtml() {
     if (this.isSignleModule) {
       this.el.classList.add('signle');
     }
-    this.el.classList.add(this.demo);
+    this.el.classList.add(this.moduleName);
     this.el.appendChild(this.canvas.el);
     document.body.appendChild(this.el);
+    this.canvas.render();
   }
   public aloneRender() {}
   public collectRender() {}
