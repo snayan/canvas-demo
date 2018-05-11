@@ -1,6 +1,6 @@
 import webpack from 'webpack';
-import HtmlWebpackPlugin from 'html-webpack-plugin';
-import { resolveByRootDir, exampleEntry } from '../script/util';
+import HtmlWebpackAssertPlugin from '../plugins/html-webpack-assert-plugin';
+import { resolveByRootDir, exampleEntry, DIST } from '../script/util';
 
 let { entry, variable } = exampleEntry();
 let mainEntry = { ...entry };
@@ -10,7 +10,7 @@ mainEntry[indexEntry] = resolveByRootDir('index.ts');
 const config: webpack.Configuration = {
   entry: mainEntry,
   output: {
-    path: resolveByRootDir('docs'),
+    path: resolveByRootDir(DIST),
     filename: '[name].js',
     publicPath: '/',
   },
@@ -44,9 +44,9 @@ const config: webpack.Configuration = {
     new webpack.DefinePlugin({
       'process.env.ExampleModules': JSON.stringify(variable),
     }),
-    new HtmlWebpackPlugin({
+    new HtmlWebpackAssertPlugin({
       title: 'canvas demo',
-      chunks: [indexEntry],
+      chunks: [indexEntry]
     }),
     new webpack.HashedModuleIdsPlugin(),
   ],

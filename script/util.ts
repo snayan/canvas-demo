@@ -3,6 +3,8 @@ import fs from 'fs';
 import opn from 'opn';
 import webpack from 'webpack';
 
+export const DIST = 'dist';
+
 export function resolveByRootDir(...paths: string[]) {
   return path.resolve(__dirname, '../', ...paths);
 }
@@ -20,7 +22,7 @@ export function exampleEntry() {
     return entries;
   }, {});
   let globalVariable = modules.reduce((variable, example) => {
-    variable[example] = `${example}.${current}.js`;
+    variable[example] = path.join(DIST, `${example}.${current}.js`);
     return variable;
   }, {});
   return {

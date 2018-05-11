@@ -1,7 +1,7 @@
 import webpack from 'webpack';
 import merge from 'webpack-merge';
 import CleanWebpackPlugin from 'clean-webpack-plugin';
-import { resolveByRootDir } from '../script/util';
+import { resolveByRootDir, DIST } from '../script/util';
 import baseConfig from './webpack.base';
 
 const config: webpack.Configuration = {
@@ -11,7 +11,7 @@ const config: webpack.Configuration = {
     splitChunks: {},
     minimize: true,
   },
-  plugins: [new CleanWebpackPlugin(['docs'], { root: resolveByRootDir() })],
+  plugins: [new CleanWebpackPlugin([DIST], { root: resolveByRootDir() })],
 };
 
 export default merge(baseConfig, config);
