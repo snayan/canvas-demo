@@ -10,7 +10,7 @@ mainEntry[indexEntry] = resolveByRootDir('index.ts');
 const config: webpack.Configuration = {
   entry: mainEntry,
   output: {
-    path: resolveByRootDir('dist'),
+    path: resolveByRootDir('docs'),
     filename: '[name].js',
     publicPath: '/',
   },

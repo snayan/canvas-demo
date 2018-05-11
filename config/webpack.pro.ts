@@ -11,7 +11,7 @@ const config: webpack.Configuration = {
     splitChunks: {},
     minimize: true,
   },
-  plugins: [new CleanWebpackPlugin(['dist'], { root: resolveByRootDir() })],
+  plugins: [new CleanWebpackPlugin(['docs'], { root: resolveByRootDir() })],
 };
 
 export default merge(baseConfig, config);

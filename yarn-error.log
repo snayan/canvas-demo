@@ -1,5 +1,5 @@
 Arguments: 
-  /usr/local/bin/node /usr/local/bin/yarn build
+  /usr/local/bin/node /usr/local/bin/yarn add .
 
 PATH: 
   /usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/go/bin
@@ -53,6 +53,7 @@ npm manifest:
       "opn": "^5.3.0",
       "ora": "^2.1.0",
       "portfinder": "^1.0.13",
+      "ts-loader": "^4.3.0",
       "ts-node": "^6.0.2",
       "tsconfig-paths": "^3.3.1",
       "typescript": "^2.8.3",
@@ -1994,7 +1995,7 @@ Lockfile:
       json5 "^0.5.0"
       object-assign "^4.0.1"
   
-  loader-utils@^1.1.0:
+  loader-utils@^1.0.2, loader-utils@^1.1.0:
     version "1.1.0"
     resolved "https://registry.yarnpkg.com/loader-utils/-/loader-utils-1.1.0.tgz#c98aef488bcceda2ffb5e2de646d6a754429f5cd"
     dependencies:
@@ -2993,7 +2994,7 @@ Lockfile:
     dependencies:
       node-forge "0.7.5"
   
-  "semver@2 || 3 || 4 || 5", semver@^5.3.0:
+  "semver@2 || 3 || 4 || 5", semver@^5.0.1, semver@^5.3.0:
     version "5.5.0"
     resolved "https://registry.yarnpkg.com/semver/-/semver-5.5.0.tgz#dc4bbc7a6ca9d916dee5d43516f0092b58f7b8ab"
   
@@ -3411,6 +3412,16 @@ Lockfile:
     version "1.0.0"
     resolved "https://registry.yarnpkg.com/trim-newlines/-/trim-newlines-1.0.0.tgz#5887966bb582a4503a41eb524f7d35011815a613"
   
+  ts-loader@^4.3.0:
+    version "4.3.0"
+    resolved "https://registry.yarnpkg.com/ts-loader/-/ts-loader-4.3.0.tgz#4e3ba172783d1256d3a23bdfadde011a795fae9e"
+    dependencies:
+      chalk "^2.3.0"
+      enhanced-resolve "^4.0.0"
+      loader-utils "^1.0.2"
+      micromatch "^3.1.4"
+      semver "^5.0.1"
+  
   ts-node@^6.0.2:
     version "6.0.2"
     resolved "https://registry.yarnpkg.com/ts-node/-/ts-node-6.0.2.tgz#e132d530e53173bc6a8c21ea65f64d8b47bc573e"
@@ -3813,17 +3824,14 @@ Lockfile:
     resolved "https://registry.yarnpkg.com/yn/-/yn-2.0.0.tgz#e5adabc8acf408f6385fc76495684c88e6af689a"
 
 Trace: 
-  Error: Command failed.
-  Exit code: 1
-  Command: sh
-  Arguments: -c ts-node --project tsconfig.webpack.json script/build.ts
-  Directory: /Users/yang.zhang/Documents/github/canvas-demo
-  Output:
-  
-      at ProcessTermError.MessageError (/usr/local/lib/node_modules/yarn/lib/cli.js:186:110)
-      at new ProcessTermError (/usr/local/lib/node_modules/yarn/lib/cli.js:226:113)
-      at ChildProcess.<anonymous> (/usr/local/lib/node_modules/yarn/lib/cli.js:30281:17)
-      at emitTwo (events.js:126:13)
-      at ChildProcess.emit (events.js:214:7)
-      at maybeClose (internal/child_process.js:925:16)
-      at Process.ChildProcess._handle.onexit (internal/child_process.js:209:5)
+  Error: Received malformed response from registry for undefined. The registry may be down.
+      at new MessageError (/usr/local/lib/node_modules/yarn/lib/cli.js:186:110)
+      at Function.<anonymous> (/usr/local/lib/node_modules/yarn/lib/cli.js:51419:15)
+      at Generator.next (<anonymous>)
+      at step (/usr/local/lib/node_modules/yarn/lib/cli.js:98:30)
+      at /usr/local/lib/node_modules/yarn/lib/cli.js:116:14
+      at new Promise (<anonymous>)
+      at new F (/usr/local/lib/node_modules/yarn/lib/cli.js:23451:28)
+      at Function.<anonymous> (/usr/local/lib/node_modules/yarn/lib/cli.js:95:12)
+      at Function.findVersionInRegistryResponse (/usr/local/lib/node_modules/yarn/lib/cli.js:51461:19)
+      at NpmResolver.<anonymous> (/usr/local/lib/node_modules/yarn/lib/cli.js:51479:28)
