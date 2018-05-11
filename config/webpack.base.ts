@@ -1,5 +1,4 @@
 import webpack from 'webpack';
-import HtmlWebpackAssertPlugin from '../plugins/html-webpack-assert-plugin';
 import { resolveByRootDir, exampleEntry, DIST } from '../script/util';
 
 let { entry, variable } = exampleEntry();
@@ -44,12 +43,10 @@ const config: webpack.Configuration = {
     new webpack.DefinePlugin({
       'process.env.ExampleModules': JSON.stringify(variable),
     }),
-    new HtmlWebpackAssertPlugin({
-      title: 'canvas demo',
-      chunks: [indexEntry]
-    }),
     new webpack.HashedModuleIdsPlugin(),
   ],
 };
+
+export { indexEntry };
 
 export default config;

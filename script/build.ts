@@ -3,8 +3,6 @@ import webpack from 'webpack';
 import ora from 'ora';
 import config from '../config/webpack.pro';
 
-process.env.NODE_ENV = 'production';
-
 let spinner = new ora();
 spinner.start('start build\n');
 

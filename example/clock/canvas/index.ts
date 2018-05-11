@@ -18,8 +18,8 @@ class ClockCanvas extends Canvas {
     this.width = width;
     this.height = height;
     this.initVariable();
-    this.setCtxAttribute();
     this.initCanvasSize();
+    this.setCtxAttribute(); //设置ctx的属性必须在设置canvas宽高之后设置，否则无效
     this.ctx.translate(width / 2, height / 2);
   }
   /* 初始化变量 */

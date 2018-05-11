@@ -9,8 +9,6 @@ import { clearConsole, openBrowser, formatMessage } from './util';
 
 const isInteractive = process.stdout.isTTY;
 
-process.env.NODE_ENV = 'development';
-
 let spinner = new ora();
 spinner.start('start server\n');
 

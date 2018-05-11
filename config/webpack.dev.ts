@@ -1,6 +1,9 @@
+process.env.NODE_ENV = 'development';
+
 import webpack from 'webpack';
 import merge from 'webpack-merge';
-import baseConfig from './webpack.base';
+import HtmlWebpackPlugin from 'html-webpack-plugin';
+import baseConfig, { indexEntry } from './webpack.base';
 
 const config: webpack.Configuration = {
   mode: 'development',
@@ -9,7 +12,14 @@ const config: webpack.Configuration = {
     splitChunks: false,
     minimize: false,
   },
-  plugins: [new webpack.HotModuleReplacementPlugin(), new webpack.NamedModulesPlugin()],
+  plugins: [
+    new webpack.HotModuleReplacementPlugin(),
+    new webpack.NamedModulesPlugin(),
+    new HtmlWebpackPlugin({
+      chunks: [indexEntry],
+      title: 'canvas demo',
+    }),
+  ],
 };
 
 export default merge(baseConfig, config);

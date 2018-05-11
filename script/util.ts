@@ -22,7 +22,7 @@ export function exampleEntry() {
     return entries;
   }, {});
   let globalVariable = modules.reduce((variable, example) => {
-    variable[example] = path.join(DIST, `${example}.${current}.js`);
+    variable[example] = path.join(process.env.NODE_ENV === 'production' ? DIST : '', `${example}.${current}.js`);
     return variable;
   }, {});
   return {
