@@ -1,0 +1,37 @@
+.signle {
+  display: flex;
+  justify-content: center;
+  align-items: stretch;
+  height: 100%;
+  overflow: hidden;
+}
+
+.codes {
+  flex: 1 1 auto;
+  width: 50%;
+  margin: 20px;
+  padding: 20px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid royalblue;
+  border-radius: 10px;
+}
+.codes-tab {
+  flex: 0 0 auto;
+}
+.codes-section {
+  flex: 1 1 auto;
+  overflow: scroll;
+}
+.result {
+  flex: 1 1 auto;
+  margin: 20px;
+  padding: 20px;
+  width: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid royalblue;
+  border-radius: 10px;
+}

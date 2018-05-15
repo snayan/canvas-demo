@@ -51,6 +51,7 @@
     "ts-node": "^6.0.2",
     "tsconfig-paths": "^3.3.1",
     "typescript": "^2.8.3",
+    "typings-for-css-modules-loader": "^1.7.0",
     "webpack": "^4.6.0",
     "webpack-dev-server": "^3.1.4",
     "webpack-merge": "^4.1.2"

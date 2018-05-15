@@ -46,6 +46,7 @@ const config: webpack.Configuration = {
       'process.env.ExampleModules': JSON.stringify(variable),
     }),
     new webpack.HashedModuleIdsPlugin(),
+    new webpack.WatchIgnorePlugin([/scss\.d\.ts/]),
   ],
 };
 

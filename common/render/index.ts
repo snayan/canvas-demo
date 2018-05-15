@@ -1,9 +1,12 @@
 /* render class */
 import { Base64 } from 'js-base64';
-import Canvas from './canvas';
-import { isSignleModule } from './util';
-import Github, { GitHubApiResult } from './github';
+import Canvas from '../canvas';
+import { isSignleModule } from '../util';
+import Github, { GitHubApiResult } from '../github';
 import Prism from 'prismjs';
+import styles from './index.scss';
+
+console.log(styles);
 
 abstract class CommonRender {
   public isSignleModule: boolean;
@@ -21,6 +24,7 @@ abstract class CommonRender {
   private renderCanvas() {
     let container = document.createElement('div');
     this.canvas.render();
+    container.className = styles.result;
     container.appendChild(this.canvas.el);
     this.el.appendChild(container);
   }
@@ -34,10 +38,13 @@ abstract class CommonRender {
     let codes = [];
     for (let { name, content } of contents) {
       navs.push(`<span>${name}</span>`);
-      codes.push(`<div><pre><code class="language-typescript">${Prism.highlight(Base64.decode(content), Prism.languages.javascript, 'typescript')}</code></pre></div>`);
+      codes.push(`<div><pre class="language-typescript">${Prism.highlight(Base64.decode(content), Prism.languages.javascript, 'typescript')}</pre></div>`);
     }
+    nav.className = styles.codesTab;
     nav.innerHTML = navs.join('');
+    code.className = styles.codesSection;
     code.innerHTML = codes.join('');
+    container.className = styles.codes;
     container.appendChild(nav);
     container.appendChild(code);
     this.el.appendChild(container);
@@ -46,8 +53,8 @@ abstract class CommonRender {
   public async render() {
     isSignleModule && (await this.renderCode());
     this.renderCanvas();
-    this.el.className = ` signle ${this.moduleName}`;
-    document.body.appendChild(this.el);
+    this.el.className = styles.signle;
+    document.body.insertBefore(this.el, document.body.firstChild);
     return this;
   }
 }

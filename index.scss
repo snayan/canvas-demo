@@ -4,6 +4,12 @@
  * @author Lea Verou
  */
 
+ html,body{
+     height: 100%;
+     margin: 0;
+     box-sizing: content-box;
+ }
+
 code[class*='language-'],
 pre[class*='language-'] {
   color: black;
