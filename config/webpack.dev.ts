@@ -12,6 +12,43 @@ const config: webpack.Configuration = {
     splitChunks: false,
     minimize: false,
   },
+  module: {
+    rules: [
+      {
+        test: /\.s?css$/,
+        use: [
+          {
+            loader: 'style-loader',
+            options: {
+              hmr: true,
+              sourceMap: true,
+            },
+          },
+          {
+            loader: 'css-loader',
+            options: {
+              minimize: false,
+              importLoaders: 2,
+              modules: false,
+              sourceMap: true,
+            },
+          },
+          {
+            loader: 'postcss-loader',
+            options: {
+              sourceMap: true,
+            },
+          },
+          {
+            loader: 'sass-loader',
+            options: {
+              sourceMap: true,
+            },
+          },
+        ],
+      },
+    ],
+  },
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NamedModulesPlugin(),

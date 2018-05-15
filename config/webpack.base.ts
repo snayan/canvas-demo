@@ -1,6 +1,8 @@
 import webpack from 'webpack';
 import { resolveByRootDir, exampleEntry, DIST } from '../script/util';
 
+let isProduction = process.env.NODE_ENV === 'production';
+
 let { entry, variable } = exampleEntry();
 let mainEntry = { ...entry };
 let indexEntry = `index.${Date.now()}`;

@@ -51,9 +51,6 @@ portfinder
     // "done" event fires when Webpack has finished recompiling the bundle.
     // Whether or not you have warnings or errors, you will get this event.
     compiler.hooks.done.tap('done', (stats) => {
-      if (isInteractive) {
-        clearConsole();
-      }
       let message = formatMessage(stats);
       if (stats.hasErrors()) {
         console.log(chalk.red('compile error occur:\n'));
