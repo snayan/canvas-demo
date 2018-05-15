@@ -1,8 +1,9 @@
 /* render class */
-
+import { Base64 } from 'js-base64';
 import Canvas from './canvas';
 import { isSignleModule } from './util';
 import Github, { GitHubApiResult } from './github';
+import Prism from 'prismjs';
 
 abstract class CommonRender {
   public isSignleModule: boolean;
@@ -33,7 +34,7 @@ abstract class CommonRender {
     let codes = [];
     for (let { name, content } of contents) {
       navs.push(`<span>${name}</span>`);
-      codes.push(`<div>${window.atob(content)}</div>`);
+      codes.push(`<div><pre><code class="language-typescript">${Prism.highlight(Base64.decode(content), Prism.languages.javascript, 'typescript')}</code></pre></div>`);
     }
     nav.innerHTML = navs.join('');
     code.innerHTML = codes.join('');

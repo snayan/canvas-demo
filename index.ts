@@ -1,4 +1,5 @@
 import { getQuery } from 'common/util';
+import './index.scss';
 
 function success() {
   console.log('load module success');
