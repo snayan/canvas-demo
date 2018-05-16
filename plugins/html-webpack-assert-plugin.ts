@@ -46,7 +46,12 @@ class HtmlWebpackAssertPlugin {
     let chunks = compilation.chunks;
     for (let i = 0, j = chunks.length; i < j; i++) {
       if (chunks[i].name === chunk) {
-        return chunks[i].files[0];
+        return chunks[i].files.reduce((s, v) => {
+          if (!s && /\.js$/.test(v)) {
+            s = v;
+          }
+          return s;
+        }, '');
       }
     }
     return null;
