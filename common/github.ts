@@ -1,5 +1,7 @@
 /* 获取GitHub源代码 */
 
+import { setStorage, getStorage } from './util';
+
 export interface GitHubApiResult {
   name: string;
   path: string;
@@ -28,7 +30,10 @@ class Github {
   }
   public async getCanvasFiles() {
     let files: GitHubApiResult[];
-    let contents: GitHubApiResult[] = [];
+    let contents: GitHubApiResult[] = getStorage(this.moduleName) || [];
+    if (contents && contents.length) {
+      return contents;
+    }
     let res = await this.fetch(this.sourcePath);
     if (!res.ok) {
       return contents;
@@ -40,6 +45,7 @@ class Github {
         res.ok && contents.push(await res.json());
       }
     }
+    setStorage(this.moduleName, contents);
     return contents;
   }
 }
