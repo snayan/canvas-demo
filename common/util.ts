@@ -5,14 +5,14 @@ export function getQuery() {
     return query;
   }
   let reg = /\?(\w+)=(\w+)/g;
-  let matchs = null;
-  while ((matchs = reg.exec(search))) {
-    query[matchs[1]] = matchs[2];
+  let matches = null;
+  while ((matches = reg.exec(search))) {
+    query[matches[1]] = matches[2];
   }
   return query;
 }
 
-export function isSignleModule(m: string) {
+export function isSingleModule(m: string) {
   let query = getQuery();
   return query && query.module === m;
 }

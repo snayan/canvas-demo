@@ -1,5 +1,5 @@
 import CommonRender from 'common/render';
-import { isSignleModule } from 'common/util';
+import { isSingleModule } from 'common/util';
 import ClockCanvas from './canvas';
 
 const moduleName = 'clock';
@@ -12,6 +12,6 @@ export default class Clock extends CommonRender {
   }
 }
 
-if (isSignleModule(moduleName)) {
+if (isSingleModule(moduleName)) {
   new Clock().render();
 }
