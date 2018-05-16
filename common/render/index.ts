@@ -19,6 +19,14 @@ abstract class CommonRender {
     this.github = new Github(moduleName);
   }
 
+  private loading() {
+    let el = document.createElement('i');
+    el.className = styles.loading;
+    document.body.appendChild(el);
+    return () => {
+      document.body.removeChild(el);
+    };
+  }
   private renderCanvas() {
     let container = document.createElement('div');
     this.canvas.render();
@@ -49,10 +57,15 @@ abstract class CommonRender {
   }
 
   public async render() {
+    let removeLoading = this.loading();
     this.isSingleModule && (await this.renderCode());
     this.renderCanvas();
     this.el.className = styles.single;
+    setTimeout(() => {
+      this.el.classList.add(styles.loaded);
+    }, 0);
     document.body.insertBefore(this.el, document.body.firstChild);
+    removeLoading();
     return this;
   }
 }

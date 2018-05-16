@@ -5,3 +5,6 @@ export const codes: string;
 export const codesTab: string;
 export const codesSection: string;
 export const result: string;
+export const loading: string;
+export const spin: string;
+export const loaded: string;
