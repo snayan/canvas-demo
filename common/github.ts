@@ -16,6 +16,11 @@ export interface GitHubApiResult {
   encoding?: string;
 }
 
+interface StorageValue {
+  build: string;
+  content: GitHubApiResult[];
+}
+
 class Github {
   moduleName: string;
   sourcePath: string;
@@ -30,10 +35,14 @@ class Github {
   }
   public async getCanvasFiles() {
     let files: GitHubApiResult[];
-    let contents: GitHubApiResult[] = getStorage(this.moduleName) || [];
-    if (contents && contents.length) {
-      return contents;
+    let contents: GitHubApiResult[] = [];
+    let storages: StorageValue = getStorage(this.moduleName);
+    if (storages && storages.build && storages.content) {
+      if (storages.build === process.env.ExampleModules[this.moduleName]) {
+        return storages.content;
+      }
     }
+
     let res = await this.fetch(this.sourcePath);
     if (!res.ok) {
       return contents;
@@ -45,7 +54,7 @@ class Github {
         res.ok && contents.push(await res.json());
       }
     }
-    setStorage(this.moduleName, contents);
+    setStorage(this.moduleName, { build: process.env.ExampleModules[this.moduleName], content: contents });
     return contents;
   }
 }
