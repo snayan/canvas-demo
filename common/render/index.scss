@@ -1,4 +1,4 @@
-.signle {
+.single {
   display: flex;
   justify-content: center;
   align-items: stretch;
@@ -17,13 +17,16 @@
   border: 1px solid royalblue;
   border-radius: 10px;
 }
+
 .codes-tab {
   flex: 0 0 auto;
 }
+
 .codes-section {
   flex: 1 1 auto;
   overflow: scroll;
 }
+
 .result {
   flex: 1 1 auto;
   margin: 20px;

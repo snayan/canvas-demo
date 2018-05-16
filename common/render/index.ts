@@ -53,7 +53,7 @@ abstract class CommonRender {
   public async render() {
     isSignleModule && (await this.renderCode());
     this.renderCanvas();
-    this.el.className = styles.signle;
+    this.el.className = styles.single;
     document.body.insertBefore(this.el, document.body.firstChild);
     return this;
   }
