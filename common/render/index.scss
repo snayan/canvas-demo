@@ -105,6 +105,12 @@
   }
 }
 
+.mobile {
+  & > .codes {
+    display: none;
+  }
+}
+
 .loaded {
   opacity: 1;
 }

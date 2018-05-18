@@ -3,6 +3,7 @@ process.env.NODE_ENV = 'development';
 import webpack from 'webpack';
 import merge from 'webpack-merge';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
+import HtmlWebpackAssertPlugin from '../plugins/html-webpack-assert-plugin';
 import baseConfig, { indexEntry } from './webpack.base';
 
 const config: webpack.Configuration = {
@@ -55,9 +56,10 @@ const config: webpack.Configuration = {
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NamedModulesPlugin(),
-    new HtmlWebpackPlugin({
+    new HtmlWebpackAssertPlugin({
       chunks: [indexEntry],
       title: 'canvas demo',
+      dev: true,
     }),
   ],
 };

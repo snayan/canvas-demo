@@ -3,6 +3,7 @@ import { Base64 } from 'js-base64';
 import Canvas from '../canvas';
 import { isSingleModule } from '../util';
 import Github, { GitHubApiResult } from '../github';
+import browser from '../browser';
 import Prism from 'prismjs';
 import styles from './index.scss';
 
@@ -17,6 +18,10 @@ abstract class CommonRender {
     this.el = document.createElement('div');
     this.isSingleModule = isSingleModule(moduleName);
     this.github = new Github(moduleName);
+    console.log(browser);
+    if (browser.mobile) {
+      this.el.classList.add(styles.mobile);
+    }
   }
 
   private loading() {
@@ -29,10 +34,11 @@ abstract class CommonRender {
   }
   private renderCanvas() {
     let container = document.createElement('div');
-    this.canvas.render();
     container.className = styles.result;
-    container.appendChild(this.canvas.el);
     this.el.appendChild(container);
+    setTimeout(() => {
+      this.canvas.render(container);
+    }, 0);
   }
 
   private async renderCode() {
@@ -64,14 +70,16 @@ abstract class CommonRender {
 
   public async render() {
     let removeLoading = this.loading();
-    this.isSingleModule && (await this.renderCode());
+    document.body.insertBefore(this.el, document.body.firstChild);
+    if (this.isSingleModule) {
+      this.el.classList.add(styles.single);
+      await this.renderCode();
+    }
     this.renderCanvas();
-    this.el.className = styles.single;
+    removeLoading();
     setTimeout(() => {
       this.el.classList.add(styles.loaded);
     }, 0);
-    document.body.insertBefore(this.el, document.body.firstChild);
-    removeLoading();
     return this;
   }
 }

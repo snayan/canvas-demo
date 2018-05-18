@@ -1,6 +1,6 @@
 /* 获取GitHub源代码 */
 
-import { setStorage, getStorage } from './util';
+import storage from './storage';
 
 export interface GitHubApiResult {
   name: string;
@@ -36,7 +36,7 @@ class Github {
   public async getCanvasFiles() {
     let files: GitHubApiResult[];
     let contents: GitHubApiResult[] = [];
-    let storages: StorageValue = getStorage(this.moduleName);
+    let storages: StorageValue = storage.get(this.moduleName);
     if (storages && storages.build && storages.content) {
       if (storages.build === process.env.ExampleModules[this.moduleName]) {
         return storages.content;
@@ -54,7 +54,7 @@ class Github {
         res.ok && contents.push(await res.json());
       }
     }
-    setStorage(this.moduleName, { build: process.env.ExampleModules[this.moduleName], content: contents });
+    storage.set(this.moduleName, { build: process.env.ExampleModules[this.moduleName], content: contents });
     return contents;
   }
 }

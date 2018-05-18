@@ -44,6 +44,7 @@ const config: webpack.Configuration = {
     new HtmlWebpackAssertPlugin({
       title: 'canvas demo',
       chunks: [indexEntry],
+      dev: false,
     }),
   ],
 };

@@ -1,7 +1,10 @@
+import { WIDTH, HEIGHT } from './CONSTANT';
+
 abstract class Canvas {
   readonly el: HTMLCanvasElement;
-  public abstract width: number;
-  public abstract height: number;
+  public width: number;
+  public height: number;
+  public container: HTMLElement;
   constructor() {
     this.el = document.createElement('canvas');
   }
@@ -12,7 +15,12 @@ abstract class Canvas {
     this.el.width = this.width;
     this.el.height = this.height;
   }
-  public abstract render(): void;
+  public render(container: HTMLElement) {
+    this.container = container;
+    let { width, height } = container.getBoundingClientRect();
+    this.width = width || WIDTH;
+    this.height = height || HEIGHT;
+  }
 }
 
 export default Canvas;

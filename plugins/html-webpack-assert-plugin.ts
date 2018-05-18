@@ -5,37 +5,43 @@ import { resolveByRootDir, DIST } from '../script/util';
 class HtmlWebpackAssertPlugin {
   chunks: string[];
   title: string;
-  constructor({ chunks, title }: { chunks: string[]; title: string }) {
+  dev: boolean;
+  constructor({ chunks, title, dev = true }: { chunks: string[]; title: string; dev?: boolean }) {
     this.chunks = chunks;
     this.title = title;
+    this.dev = dev;
   }
   apply(compiler: webpack.Compiler) {
     compiler.hooks.emit.tapAsync('emit', (compilation, callback) => {
       //  generated file:
-      var filelist = `
+      var fidelis = `
 <!DOCTYPE html>
 <html>
     <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=0">
     <title>${this.title}</title>
     </head>
 <body>
     ${this.chunks
       .map((chunk) => {
         let url = this.assert(compilation, chunk);
-        url = path.relative(resolveByRootDir(), path.join(DIST, url));
+        if (!this.dev) {
+          url = path.relative(resolveByRootDir(), path.join(DIST, url));
+        }
         return `<script type="text/javascript" src="${url}"></script>`;
       })
       .join('\n')}
 </body>
 </html>`;
+      let paths = this.dev ? 'index.html' : path.relative(resolveByRootDir(DIST), 'index.html');
       // Insert this list into the webpack build as a new file asset:
-      compilation.assets[path.relative(resolveByRootDir(DIST), 'index.html')] = {
+      compilation.assets[paths] = {
         source: function() {
-          return filelist;
+          return fidelis;
         },
         size: function() {
-          return filelist.length;
+          return fidelis.length;
         },
       };
 

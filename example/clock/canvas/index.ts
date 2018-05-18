@@ -3,8 +3,6 @@ import { WIDTH, HEIGHT, FONT } from 'common/CONSTANT';
 
 class ClockCanvas extends Canvas {
   ctx: CanvasRenderingContext2D;
-  width: number;
-  height: number;
   radius: number;
   centerRadius: number;
   marginBound: number;
@@ -12,19 +10,14 @@ class ClockCanvas extends Canvas {
   secondPointerLength: number;
   minutePointerLength: number;
   hourPointerLength: number;
-  constructor(width: number = WIDTH, height: number = HEIGHT) {
+  constructor() {
     super();
     this.ctx = this.getContext('2d');
-    this.width = width;
-    this.height = height;
-    this.initVariable();
-    this.initCanvasSize();
-    this.setCtxAttribute(); //设置ctx的属性必须在设置canvas宽高之后设置，否则无效
-    this.ctx.translate(width / 2, height / 2);
   }
   /* 初始化变量 */
   private initVariable() {
     this.radius = Math.min(this.width, this.height) / 2 * 0.8;
+    this.radius = Math.min(this.radius, 200);
     this.centerRadius = 10;
     this.marginBound = 20;
     this.font = FONT;
@@ -122,7 +115,8 @@ class ClockCanvas extends Canvas {
     ctx.stroke();
     ctx.restore();
   }
-  public render() {
+  /* 开始 */
+  private startClock() {
     let { ctx, width, height } = this;
     ctx.clearRect(-width / 2, -height / 2, width, height);
     let date = new Date();
@@ -135,7 +129,18 @@ class ClockCanvas extends Canvas {
     this.drawHourPointer(ctx, hour);
     this.drawMinutePointer(ctx, minute);
     this.drawSecondPointer(ctx, second);
-    window.requestAnimationFrame(this.render.bind(this));
+    window.requestAnimationFrame(this.startClock.bind(this));
+  }
+  /* 渲染 */
+  public render(container: HTMLElement) {
+    super.render(container);
+    this.initVariable();
+    this.initCanvasSize();
+    this.setCtxAttribute(); //设置ctx的属性必须在设置canvas宽高之后设置，否则无效
+    this.ctx.translate(this.width / 2, this.height / 2);
+    this.startClock();
+    this.container.innerHTML = '';
+    this.container.appendChild(this.el);
   }
 }
 
