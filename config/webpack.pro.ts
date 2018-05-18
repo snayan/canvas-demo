@@ -3,7 +3,6 @@ process.env.NODE_ENV = 'production';
 import webpack from 'webpack';
 import merge from 'webpack-merge';
 import CleanWebpackPlugin from 'clean-webpack-plugin';
-import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import HtmlWebpackAssertPlugin from '../plugins/html-webpack-assert-plugin';
 import { resolveByRootDir, DIST } from '../script/util';
 import baseConfig, { indexEntry } from './webpack.base';
@@ -20,7 +19,7 @@ const config: webpack.Configuration = {
       {
         test: /\.s?css$/,
         use: [
-          MiniCssExtractPlugin.loader,
+          { loader: 'style-loader' },
           {
             loader: 'css-loader',
             options: {
@@ -45,10 +44,6 @@ const config: webpack.Configuration = {
     new HtmlWebpackAssertPlugin({
       title: 'canvas demo',
       chunks: [indexEntry],
-    }),
-    new MiniCssExtractPlugin({
-      filename: '[name].css',
-      chunkFilename: '[id].[hash].css',
     }),
   ],
 };

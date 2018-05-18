@@ -42,9 +42,15 @@ abstract class CommonRender {
     let code = document.createElement('div');
     let naves = [];
     let codes = [];
-    for (let { name, content } of contents) {
-      naves.push(`<span>${name}</span>`);
-      codes.push(`<div><pre class="language-typescript">${Prism.highlight(Base64.decode(content), Prism.languages.javascript, 'typescript')}</pre></div>`);
+    for (let [index, { name, content }] of contents.entries()) {
+      naves.push(`<span class='${index === 0 ? styles.activeTab : styles.otherTab}'>${name}</span>`);
+      codes.push(
+        `<div class='${index === 0 ? styles.activeSection : styles.otherSection}' ><pre class="language-typescript">${Prism.highlight(
+          Base64.decode(content),
+          Prism.languages.javascript,
+          'typescript',
+        )}</pre></div>`,
+      );
     }
     nav.className = styles.codesTab;
     nav.innerHTML = naves.join('');
