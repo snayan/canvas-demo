@@ -50,7 +50,7 @@ class Star {
   private createPoint() {
     let { renderCtx, isMeteor, radius } = this;
     let { width, height } = renderCtx.canvas;
-    let x = this.random(isMeteor ? width / 2 : 0, width);
+    let x = this.random(0, isMeteor ? width * 2 : width);
     let y = isMeteor ? -radius : this.random(0, height);
     return { x, y };
   }

@@ -1,6 +1,7 @@
 import Canvas from 'common/canvas';
 import BgCanvas from './bgCanvas';
 import ImgCanvas from './imgCanvas';
+import MeteorCanvas from './meteorCanvas';
 import styles from '../index.scss';
 
 class ShCanvas extends Canvas {
@@ -8,6 +9,7 @@ class ShCanvas extends Canvas {
   images: HTMLImageElement[];
   bgCanvas: BgCanvas;
   imgCanvas: ImgCanvas;
+  meteorCanvas: MeteorCanvas;
   promise: Promise<void>;
   constructor() {
     super();
@@ -39,8 +41,10 @@ class ShCanvas extends Canvas {
     let { width, height, ctx } = this;
     ctx.clearRect(0, 0, width, height);
     this.bgCanvas.render();
-    this.ctx.drawImage(this.bgCanvas.el, 0, 0);
     this.imgCanvas.render();
+    this.meteorCanvas.render();
+    this.ctx.drawImage(this.bgCanvas.el, 0, 0);
+    this.ctx.drawImage(this.meteorCanvas.el, 0, 0);
     this.ctx.drawImage(this.imgCanvas.el, 0, 0);
     requestAnimationFrame(this.startSh.bind(this));
   }
@@ -52,6 +56,7 @@ class ShCanvas extends Canvas {
     this.container.appendChild(this.el);
     this.bgCanvas = new BgCanvas(this.width, this.height);
     this.imgCanvas = new ImgCanvas(this.width, this.height, this.images);
+    this.meteorCanvas = new MeteorCanvas(this.width, this.height);
     this.startSh();
     return this;
   }
