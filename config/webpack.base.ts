@@ -31,6 +31,18 @@ const config: webpack.Configuration = {
         include: [resolveByRootDir('index.ts'), resolveByRootDir('example'), resolveByRootDir('common')],
         exclude: /node_modules/,
       },
+      {
+        test: /\.(png|jpeg|gif)$/,
+        use: [
+          {
+            loader: 'file-loader',
+            options: {
+              name: '[name].[hash].[ext]',
+              outputPath: 'images/',
+            },
+          },
+        ],
+      },
     ],
   },
   target: 'web',

@@ -5,10 +5,9 @@ import ClockCanvas from './canvas';
 const moduleName = 'clock';
 
 export default class Clock extends CommonRender {
-  canvas: ClockCanvas;
   constructor() {
     super(moduleName);
-    this.canvas = new ClockCanvas();
+    this.canvas.push(new ClockCanvas());
   }
 }
 

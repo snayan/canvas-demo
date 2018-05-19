@@ -8,9 +8,11 @@ abstract class Canvas {
   constructor() {
     this.el = document.createElement('canvas');
   }
-  private initCanvasSize() {
-    this.el.width = this.width;
-    this.el.height = this.height;
+  public initCanvasSize(width, height) {
+    this.el.width = width;
+    this.el.height = height;
+    this.width = width;
+    this.height = height;
   }
   public getContext(contextId: '2d', contextAttributes?: Canvas2DContextAttributes) {
     return this.el.getContext(contextId, contextAttributes);
@@ -19,9 +21,7 @@ abstract class Canvas {
     this.container = container;
     this.container.classList.add(className);
     let { width, height } = container.getBoundingClientRect();
-    this.width = width || WIDTH;
-    this.height = height || HEIGHT;
-    this.initCanvasSize();
+    this.initCanvasSize(width || WIDTH, height || HEIGHT);
   }
 }
 

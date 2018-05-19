@@ -12,8 +12,9 @@ abstract class CommonRender {
   public el: HTMLDivElement;
   public moduleName: string;
   public github: Github;
-  public abstract canvas: Canvas;
+  public canvas: Canvas[];
   constructor(moduleName: string) {
+    this.canvas = [];
     this.moduleName = moduleName;
     this.el = document.createElement('div');
     this.isSingleModule = isSingleModule(moduleName);
@@ -36,7 +37,9 @@ abstract class CommonRender {
     container.className = styles.result;
     this.el.appendChild(container);
     setTimeout(() => {
-      this.canvas.render(container);
+      for (let canvas of this.canvas) {
+        canvas.render(container);
+      }
     }, 0);
   }
 

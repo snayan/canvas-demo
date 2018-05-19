@@ -1,14 +1,15 @@
 import CommonRender from 'common/render';
+import Canvas from 'common/canvas';
 import { isSingleModule } from 'common/util';
 import ShCanvas from './canvas';
 
 const moduleName = 'sh';
 
 export default class Sh extends CommonRender {
-  canvas: ShCanvas;
+  canvas: Canvas[];
   constructor() {
     super(moduleName);
-    this.canvas = new ShCanvas();
+    this.canvas.push(new ShCanvas());
   }
 }
 
