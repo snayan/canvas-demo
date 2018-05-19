@@ -15,16 +15,22 @@ export default class Sh extends CommonRender {
     this.canvas.push(new ShCanvas());
   }
   loadBgm() {
-    let audio = document.createElement('audio');
-    let source = document.createElement('source');
-    source.src = bgm;
-    source.type = 'audio/mp3';
-    audio.appendChild(source);
-    document.body.appendChild(audio);
-    audio.muted = false;
-    audio.loop = true;
-    audio.preload = '';
-    audio.play().then(()=>console.log(1)).catch(e=>console.log(e))
+    try {
+      let audio = document.createElement('audio');
+      let source = document.createElement('source');
+      source.src = bgm;
+      source.type = 'audio/mp3';
+      audio.appendChild(source);
+      document.body.appendChild(audio);
+      audio.muted = false;
+      audio.loop = true;
+      audio
+        .play()
+        .then(() => console.log(1))
+        .catch((e) => console.log(e));
+    } catch (e) {
+      console.log(e);
+    }
     return this;
   }
 }

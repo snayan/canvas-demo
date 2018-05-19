@@ -23,12 +23,13 @@ class ShCanvas extends Canvas {
     let count = 38;
     return new Promise((resolve) => {
       for (let i = 0; i < count; i++) {
-        let url = require(`../img/${i + 1}.jpeg`);
+        let url = require(`../img/${i + 1}.jpg`);
         let img = new Image();
         img.src = url;
         img.onload = () => {
           this.images.push(img);
-          if (this.images.length > 5) {
+          let l = this.images.length;
+          if (l > 5 || l === count) {
             resolve();
           }
         };
