@@ -75,7 +75,7 @@ abstract class CommonRender {
     document.body.insertBefore(this.el, document.body.firstChild);
     if (this.isSingleModule) {
       this.el.classList.add(styles.single);
-      await this.renderCode();
+      browser.pc && (await this.renderCode());
     }
     this.renderCanvas();
     removeLoading();
