@@ -2,6 +2,7 @@ import Canvas from 'common/canvas';
 import BgCanvas from './bgCanvas';
 import ImgCanvas from './imgCanvas';
 import MeteorCanvas from './meteorCanvas';
+import LoadingCanvas from './loadingCanvas';
 import styles from '../index.scss';
 
 class ShCanvas extends Canvas {
@@ -10,33 +11,29 @@ class ShCanvas extends Canvas {
   bgCanvas: BgCanvas;
   imgCanvas: ImgCanvas;
   meteorCanvas: MeteorCanvas;
+  loadingCanvas: LoadingCanvas;
   promise: Promise<void>;
-  hasLoadImg: boolean;
   constructor() {
     super();
     this.images = [];
-    this.hasLoadImg = false;
     this.ctx = this.getContext('2d');
     this.promise = this.loadImages();
   }
   private loadImages() {
     let count = 38;
-    let promises = [];
-    for (let i = 0; i < count; i++) {
-      let url = require(`../img/${i + 1}.jpeg`);
-      promises.push(
-        new Promise((resolve) => {
-          let img = new Image();
-          img.src = url;
-          img.onload = () => {
-            this.images.push(img);
+    return new Promise((resolve) => {
+      for (let i = 0; i < count; i++) {
+        let url = require(`../img/${i + 1}.jpeg`);
+        let img = new Image();
+        img.src = url;
+        img.onload = () => {
+          this.images.push(img);
+          if (this.images.length > 5) {
             resolve();
-          };
-          img.onerror = resolve;
-        }),
-      );
-    }
-    return Promise.all(promises).then(() => void 0);
+          }
+        };
+      }
+    }).then(() => void 0);
   }
   /* 开始 */
   private startSh() {
@@ -46,9 +43,12 @@ class ShCanvas extends Canvas {
     this.meteorCanvas.render();
     this.ctx.drawImage(this.bgCanvas.el, 0, 0);
     this.ctx.drawImage(this.meteorCanvas.el, 0, 0);
-    if (this.hasLoadImg) {
+    if (this.imgCanvas) {
       this.imgCanvas.render();
       this.ctx.drawImage(this.imgCanvas.el, 0, 0);
+    } else {
+      this.loadingCanvas.render();
+      this.ctx.drawImage(this.loadingCanvas.el, 0, 0);
     }
     requestAnimationFrame(this.startSh.bind(this));
   }
@@ -59,9 +59,9 @@ class ShCanvas extends Canvas {
     this.container.appendChild(this.el);
     this.bgCanvas = new BgCanvas(this.width, this.height);
     this.meteorCanvas = new MeteorCanvas(this.width, this.height);
+    this.loadingCanvas = new LoadingCanvas(this.width, this.height);
     this.startSh();
     await this.promise;
-    this.hasLoadImg = true;
     this.imgCanvas = new ImgCanvas(this.width, this.height, this.images);
     return this;
   }

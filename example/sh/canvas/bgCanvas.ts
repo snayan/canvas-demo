@@ -1,6 +1,5 @@
 import Canvas from 'common/canvas';
 import Star from './star';
-import styles from '../index.scss';
 
 class BgCanvas extends Canvas {
   ctx: CanvasRenderingContext2D;
@@ -18,7 +17,6 @@ class BgCanvas extends Canvas {
     this.meteors = [];
     this.initCanvasSize(width, height);
     this.createStars();
-    this.createMeteor();
   }
   /* 画背景 */
   private drawBg(ctx: CanvasRenderingContext2D) {
@@ -39,29 +37,9 @@ class BgCanvas extends Canvas {
       this.stars.push(new Star(ctx, option));
     }
   }
-  /* 生成流星 */
-  private createMeteor() {
-    let { meteorCount, width, height, ctx } = this;
-    let option;
-    for (let i = 0; i < meteorCount; i++) {
-      setTimeout(() => {
-        option = {
-          isBlink: false,
-          isMeteor: true,
-        };
-        this.meteors.push(new Star(ctx, option));
-      }, i * 300);
-    }
-  }
   /* 画星星 */
   private drawStars() {
     for (let star of this.stars) {
-      star.render();
-    }
-  }
-  /* 画流星 */
-  private drawMeteor() {
-    for (let star of this.meteors) {
       star.render();
     }
   }
@@ -71,7 +49,6 @@ class BgCanvas extends Canvas {
     ctx.clearRect(0, 0, width, height);
     this.drawBg(this.ctx);
     this.drawStars();
-    // this.drawMeteor();
     return this;
   }
 }
