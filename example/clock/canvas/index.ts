@@ -1,5 +1,5 @@
 import Canvas from 'common/canvas';
-import { WIDTH, HEIGHT, FONT } from 'common/CONSTANT';
+import { FONT } from 'common/CONSTANT';
 
 class ClockCanvas extends Canvas {
   ctx: CanvasRenderingContext2D;
@@ -135,7 +135,6 @@ class ClockCanvas extends Canvas {
   public render(container: HTMLElement) {
     super.render(container);
     this.initVariable();
-    this.initCanvasSize();
     this.setCtxAttribute(); //设置ctx的属性必须在设置canvas宽高之后设置，否则无效
     this.ctx.translate(this.width / 2, this.height / 2);
     this.startClock();

@@ -18,7 +18,6 @@ abstract class CommonRender {
     this.el = document.createElement('div');
     this.isSingleModule = isSingleModule(moduleName);
     this.github = new Github(moduleName);
-    console.log(browser);
     if (browser.mobile) {
       this.el.classList.add(styles.mobile);
     }
