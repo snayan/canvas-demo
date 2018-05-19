@@ -39,6 +39,20 @@ const config: webpack.Configuration = {
             options: {
               name: '[name].[hash].[ext]',
               outputPath: 'images/',
+              publicPath: isProduction ? `${DIST}/images/` : '',
+            },
+          },
+        ],
+      },
+      {
+        test: /\.(mp3)$/,
+        use: [
+          {
+            loader: 'file-loader',
+            options: {
+              name: '[name].[hash].[ext]',
+              outputPath: 'media/',
+              publicPath: isProduction ? `${DIST}/media/` : '',
             },
           },
         ],

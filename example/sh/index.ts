@@ -16,16 +16,15 @@ export default class Sh extends CommonRender {
   }
   loadBgm() {
     let audio = document.createElement('audio');
+    let source = document.createElement('source');
+    source.src = bgm;
+    source.type = 'audio/mp3';
+    audio.appendChild(source);
     document.body.appendChild(audio);
-    audio.src = bgm;
-    audio.loop = true;
-    audio.autoplay = true;
     audio.muted = false;
-    audio.load();
-    audio.canPlayType
-    audio.onerror = (e) => {
-      console.log(e);
-    };
+    audio.loop = true;
+    audio.preload = '';
+    audio.play().then(()=>console.log(1)).catch(e=>console.log(e))
     return this;
   }
 }

@@ -84,7 +84,10 @@ class ImgCanvas extends Canvas {
   }
   /* 渲染 */
   public render() {
-    let { ctx, width, height, maxAngle } = this;
+    let { ctx, width, height, maxAngle, images } = this;
+    if (!images.length) {
+      return this;
+    }
     ctx.clearRect(0, 0, width, height);
     ctx.save();
     this.clip();
