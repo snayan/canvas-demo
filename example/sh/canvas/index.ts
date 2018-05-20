@@ -20,7 +20,7 @@ class ShCanvas extends Canvas {
     this.promise = this.loadImages();
   }
   private loadImages() {
-    let count = 34;
+    let count = 33;
     return new Promise((resolve) => {
       for (let i = 0; i < count; i++) {
         let url = require(`../img/${i + 1}.jpg`);
