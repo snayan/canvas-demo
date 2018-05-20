@@ -25,7 +25,7 @@ class ImgCanvas extends Canvas {
     this.maxAngle = 45;
     this.angle = this.random(-this.maxAngle, this.maxAngle);
     this.nextAngle = this.random(-this.maxAngle, this.maxAngle);
-    this.index = 0;
+    this.index = -1;
     this.alpha = 1;
     this.duration = 180;
     this.show = this.duration;
@@ -68,19 +68,23 @@ class ImgCanvas extends Canvas {
     let dst = this.computeSize(nextImg);
     let dstW = dst.dstW;
     let dstH = dst.dstH;
-    ctx.save();
-    this.rotate(this.nextAngle);
-    ctx.globalAlpha = 1 - alpha;
-    this.ctx.drawImage(nextImg, -dstW / 2, -dstH / 2, dstW, dstH);
-    ctx.restore();
-    ctx.save();
-    ctx.globalAlpha = alpha;
-    dst = this.computeSize(img);
-    dstW = dst.dstW;
-    dstH = dst.dstH;
-    this.rotate(this.angle);
-    this.ctx.drawImage(img, -dstW / 2, -dstH / 2, dstW, dstH);
-    ctx.restore();
+    if (nextImg) {
+      ctx.save();
+      this.rotate(this.nextAngle);
+      ctx.globalAlpha = 1 - alpha;
+      this.ctx.drawImage(nextImg, -dstW / 2, -dstH / 2, dstW, dstH);
+      ctx.restore();
+    }
+    if (img) {
+      ctx.save();
+      ctx.globalAlpha = alpha;
+      dst = this.computeSize(img);
+      dstW = dst.dstW;
+      dstH = dst.dstH;
+      this.rotate(this.angle);
+      this.ctx.drawImage(img, -dstW / 2, -dstH / 2, dstW, dstH);
+      ctx.restore();
+    }
   }
   /* 渲染 */
   public render() {

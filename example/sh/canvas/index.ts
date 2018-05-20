@@ -76,13 +76,13 @@ class ShCanvas extends Canvas {
       ctx.rect(btnLeft, btnTop, btnWidth, btnHeight);
       if (ctx.isPointInPath(x, y)) {
         this.hasInteract = true;
+        this.apologizeCanvas.drop();
         try {
           let playPromise = this.audioElement.play();
           if (playPromise && typeof playPromise.then === 'function') {
             playPromise.then(() => true).catch(() => false);
           }
         } catch (e) {}
-        this.apologizeCanvas.destroy();
       }
     });
   }
@@ -97,7 +97,7 @@ class ShCanvas extends Canvas {
     if (showLoading) {
       this.loadingCanvas.render();
       this.ctx.drawImage(this.loadingCanvas.el, 0, 0);
-    } else if (!hasInteract) {
+    } else if (!this.apologizeCanvas.isOut) {
       this.apologizeCanvas.render();
       this.ctx.drawImage(this.apologizeCanvas.el, 0, 0);
     } else {
