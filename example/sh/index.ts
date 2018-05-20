@@ -17,17 +17,15 @@ export default class Sh extends CommonRender {
   loadBgm() {
     try {
       let audio = document.createElement('audio');
-      let source = document.createElement('source');
-      source.src = bgm;
-      source.type = 'audio/mp3';
-      audio.appendChild(source);
-      document.body.appendChild(audio);
       audio.muted = false;
       audio.loop = true;
+      audio.src = bgm;
+      audio.load();
       audio
         .play()
         .then(() => console.log(1))
         .catch((e) => console.log(e));
+      document.body.appendChild(audio);
     } catch (e) {
       console.log(e);
     }

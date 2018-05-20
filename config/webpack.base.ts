@@ -32,7 +32,7 @@ const config: webpack.Configuration = {
         exclude: /node_modules/,
       },
       {
-        test: /\.(png|jpg|jpeg|gif|mp3)$/,
+        test: /\.(png|jpg|jpeg|gif)$/,
         use: [
           {
             loader: 'file-loader',
