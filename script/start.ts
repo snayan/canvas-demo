@@ -43,7 +43,7 @@ portfinder
     // "invalid" is short for "bundle invalidated", it doesn't imply any errors.
     compiler.hooks.invalid.tap('invalid', () => {
       if (isInteractive) {
-        clearConsole();
+        // clearConsole();
       }
       console.log('Compiling...');
     });
@@ -76,7 +76,7 @@ portfinder
         process.exit(1);
       }
       if (isInteractive) {
-        clearConsole();
+        // clearConsole();
       }
       openBrowser(url);
     });

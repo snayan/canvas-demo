@@ -9,13 +9,16 @@ export function resolveByRootDir(...paths: string[]) {
   return path.resolve(__dirname, '../', ...paths);
 }
 
-export function resolveExpamleDir() {
+export function resolveExampleDir() {
   let example = resolveByRootDir('example');
-  return fs.readdirSync(example);
+  return fs.readdirSync(example).filter((v) => {
+    let stats = fs.statSync(resolveByRootDir('example', v));
+    return stats.isDirectory();
+  });
 }
 
 export function exampleEntry() {
-  let modules = resolveExpamleDir();
+  let modules = resolveExampleDir();
   let current = Date.now();
   let buildEntry = modules.reduce((entries, example) => {
     entries[`${example}.${current}`] = resolveByRootDir('example', example, 'index.ts');
