@@ -43,6 +43,7 @@ class BgCanvas extends Canvas {
       star.render();
     }
   }
+
   /* 渲染 */
   public render() {
     let { ctx, width, height } = this;
