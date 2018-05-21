@@ -13,3 +13,6 @@ export const loading: string;
 export const spin: string;
 export const mobile: string;
 export const loaded: string;
+export const error: string;
+export const errorTitle: string;
+export const errorTip: string;

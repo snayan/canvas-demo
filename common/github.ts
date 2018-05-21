@@ -45,7 +45,13 @@ class Github {
 
     let res = await this.fetch(this.sourcePath);
     if (!res.ok) {
-      return contents;
+      throw new Error(
+        JSON.stringify({
+          status: res.status,
+          statusText: res.statusText,
+          body: await res.text(),
+        }),
+      );
     }
     files = await res.json();
     for (let file of files) {

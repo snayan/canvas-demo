@@ -44,29 +44,52 @@ abstract class CommonRender {
   }
 
   private async renderCode() {
-    let contents = await this.github.getCanvasFiles();
     let container = document.createElement('div');
-    let nav = document.createElement('nav');
     let code = document.createElement('div');
+    let nav = document.createElement('nav');
     let naves = [];
     let codes = [];
-    for (let [index, { name, content }] of contents.entries()) {
-      naves.push(`<span class='${index === 0 ? styles.activeTab : styles.otherTab}'>${name}</span>`);
-      codes.push(
-        `<div class='${index === 0 ? styles.activeSection : styles.otherSection}' ><pre class="language-typescript">${Prism.highlight(
-          Base64.decode(content),
-          Prism.languages.javascript,
-          'typescript',
-        )}</pre></div>`,
-      );
+    let currentIndex = '0';
+    try {
+      let contents = await this.github.getCanvasFiles();
+      for (let [index, { name, content }] of contents.entries()) {
+        naves.push(`<span class='${index === 0 ? styles.activeTab : styles.otherTab}' data-index='${index}'>${name}</span>`);
+        codes.push(
+          `<div class='${index === 0 ? styles.activeSection : styles.otherSection}' data-index='${index}' ><pre class="language-typescript">${Prism.highlight(
+            Base64.decode(content),
+            Prism.languages.javascript,
+            'typescript',
+          )}</pre></div>`,
+        );
+      }
+    } catch (e) {
+      let msg = JSON.parse(e.message);
+      codes.push(`<div class='${styles.error}'><h4 class='${styles.errorTitle}'>[${msg.status}]${msg.statusText}</h4><p class='${styles.errorTip}'>${msg.body}</p></div>`);
     }
+    nav.addEventListener('click', (e: MouseEvent) => {
+      let el = e.target as HTMLSpanElement;
+      let index = el.dataset['index'];
+      if (index === currentIndex) {
+        return false;
+      }
+      let naves = nav.querySelectorAll('span');
+      let preCodes = code.querySelector(`div[data-index='${currentIndex}']`);
+      let currentCode = code.querySelector(`div[data-index='${index}']`);
+      for (let el of naves) {
+        el.className = el.dataset['index'] === index ? styles.activeTab : styles.otherTab;
+      }
+      preCodes.className = styles.otherSection;
+      currentCode.className = styles.activeSection;
+      currentIndex = index;
+      return false;
+    });
     nav.className = styles.codesTab;
     nav.innerHTML = naves.join('');
+    container.appendChild(nav);
     code.className = styles.codesSection;
     code.innerHTML = codes.join('');
-    container.className = styles.codes;
-    container.appendChild(nav);
     container.appendChild(code);
+    container.className = styles.codes;
     this.el.appendChild(container);
   }
 

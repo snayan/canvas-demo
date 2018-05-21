@@ -26,6 +26,7 @@
   height: 42px;
   display: flex;
   align-items: stretch;
+  overflow: auto;
 }
 
 .otherTab {
@@ -33,6 +34,8 @@
   background: rgba($color: #666, $alpha: 0.6);
   color: rgba($color: #fff, $alpha: 0.6);
   line-height: 42px;
+  border-right: 1px solid #fff;
+  cursor: pointer;
   &:hover {
     background: rgba($color: #666, $alpha: 0.4);
     color: rgba($color: #fff, $alpha: 1);
@@ -44,6 +47,8 @@
   color: #3a73d1;
   padding: 0 10px;
   line-height: 42px;
+  border-right: 1px solid #fff;
+  cursor: pointer;
   &:hover {
     color: #0858db;
   }
@@ -113,6 +118,21 @@
 
 .loaded {
   opacity: 1;
+}
+
+.error {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.errorTitle {
+  color: red;
+  font-weight: 700;
+  font-size: 24px;
+}
+.errorTip {
+  color: #999;
+  font-size: 12px;
 }
 
 @keyframes spin {
