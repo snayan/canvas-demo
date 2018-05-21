@@ -6,15 +6,11 @@ class BgCanvas extends Canvas {
   font: string;
   starCount: number;
   stars: Star[];
-  meteorCount: number;
-  meteors: Star[];
   constructor(width, height) {
     super();
     this.ctx = this.getContext('2d');
     this.starCount = 280;
     this.stars = [];
-    this.meteorCount = 20;
-    this.meteors = [];
     this.initCanvasSize(width, height);
     this.createStars();
   }

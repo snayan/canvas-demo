@@ -25,6 +25,7 @@ class Star {
     this.alpha = this.isMeteor ? 1 : this.random(0, 1);
     this.initCanvas();
   }
+  /* 初始化星星canvas */
   private initCanvas() {
     let radius = this.radius;
     let canvas = document.createElement('canvas');
@@ -54,6 +55,7 @@ class Star {
     let y = isMeteor ? -3 : this.random(0, height);
     return { x, y };
   }
+  /* 闪烁 */
   private blink() {
     if (this.isBlink) {
       if (this.alpha < 0) {
@@ -63,6 +65,7 @@ class Star {
       }
     }
   }
+  /* 流星 */
   private meteor() {
     let { renderCtx } = this;
     let { width, height } = renderCtx.canvas;
@@ -74,6 +77,7 @@ class Star {
     this.x -= 1 * this.radius / 10;
     this.y += 2 * this.radius / 10;
   }
+  /* 绘制 */
   public render() {
     let { renderCtx, canvas, isMeteor, isBlink } = this;
     isBlink && this.blink();

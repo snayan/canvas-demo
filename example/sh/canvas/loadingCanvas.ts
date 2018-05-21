@@ -13,7 +13,6 @@ class LoadingCanvas extends Canvas {
   constructor(width, height) {
     super();
     this.ctx = this.getContext('2d');
-    this.initCanvasSize(width, height);
     this.radius = 5;
     this.count = 6;
     this.index = 0;
@@ -21,8 +20,10 @@ class LoadingCanvas extends Canvas {
     this.show = this.duration;
     this.margin = 10;
     this.color = '#f48041';
+    this.initCanvasSize(width, height);
     this.point = this.computerPoint();
   }
+  /* 创建坐标 */
   private computerPoint() {
     let point = [];
     let { width, count, radius, margin } = this;
@@ -33,6 +34,7 @@ class LoadingCanvas extends Canvas {
     }
     return point;
   }
+  /* 绘制圆点 */
   private renderArc(index, scale) {
     let { ctx, radius, point, height } = this;
     let x = point[index];
@@ -43,6 +45,7 @@ class LoadingCanvas extends Canvas {
     ctx.fill();
     ctx.restore();
   }
+  /* 开始loading */
   private startLoading() {
     let { index, count, margin, duration, show } = this;
     for (let i = 0; i < count; i++) {

@@ -1,3 +1,5 @@
+/* 文字 */
+
 class Word {
   x: number;
   y: number;

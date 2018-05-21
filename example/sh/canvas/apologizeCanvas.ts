@@ -20,16 +20,17 @@ class ButtonCanvas extends Canvas {
     this.btnHeight = 40;
     this.btnLeft = width / 2 - this.btnWidth / 2;
     this.btnTop = 0.75 * height;
-    this.initCanvasSize(width, height);
     this.startDrop = false;
     this.lines = [];
     this.btnText = [];
-    this.createTextLine();
-    this.createBtnText();
     this.duration = 0;
     this.isOut = false;
     this.gray = 0.98;
+    this.initCanvasSize(width, height);
+    this.createTextLine();
+    this.createBtnText();
   }
+  /* 创建文字 */
   private createTextLine() {
     let { ctx, width, height } = this;
     let x;
@@ -48,6 +49,7 @@ class ButtonCanvas extends Canvas {
       }
     }
   }
+  /* 创建按钮 */
   private createBtnText() {
     let { ctx, btnTop, btnHeight, width } = this;
     let letterHeight = ctx.measureText('M').width;
@@ -64,19 +66,6 @@ class ButtonCanvas extends Canvas {
       this.btnText.push(new Word(letter, x, y, 1));
       x = x + letterWidth + space;
     }
-  }
-  private letterSpacingText(text, y, letterSpacing) {
-    let { ctx, width, startDrop } = this;
-    let arrText = text.split('');
-    let originWidth = ctx.measureText(text).width;
-    let actualWidth = originWidth + letterSpacing * (arrText.length - 1);
-    let x = width / 2 - actualWidth / 2;
-    // 开始逐字绘制
-    arrText.forEach((letter) => {
-      let letterWidth = ctx.measureText(letter).width;
-      ctx.fillText(letter, x, y);
-      x = x + letterWidth + letterSpacing;
-    });
   }
   /* 画按钮 */
   private drawBtn() {

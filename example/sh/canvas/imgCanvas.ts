@@ -1,6 +1,4 @@
 import Canvas from 'common/canvas';
-import { FONT } from 'common/CONSTANT';
-import styles from '../index.scss';
 
 class ImgCanvas extends Canvas {
   ctx: CanvasRenderingContext2D;
@@ -19,7 +17,6 @@ class ImgCanvas extends Canvas {
     super();
     this.ctx = this.getContext('2d');
     this.images = images;
-    this.initCanvasSize(width, height);
     this.marginLeft = 20;
     this.marginTop = Math.floor(this.marginLeft * height / width);
     this.maxAngle = 45;
@@ -29,6 +26,7 @@ class ImgCanvas extends Canvas {
     this.alpha = 1;
     this.duration = 180;
     this.show = this.duration;
+    this.initCanvasSize(width, height);
   }
   /* 随机数 */
   private random(min, max) {
@@ -60,6 +58,7 @@ class ImgCanvas extends Canvas {
     let dstH = dstW * imgH / imgW;
     return { dstW, dstH };
   }
+  /* 渲染图片 */
   private renderImage() {
     let { ctx, width, height, alpha, index, images } = this;
     let img = images[index];
