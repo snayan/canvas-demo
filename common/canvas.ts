@@ -17,9 +17,8 @@ abstract class Canvas {
   public getContext(contextId: '2d', contextAttributes?: Canvas2DContextAttributes) {
     return this.el.getContext(contextId, contextAttributes);
   }
-  public render(container: HTMLElement, className?: string) {
+  public render(container: HTMLElement) {
     this.container = container;
-    this.container.classList.add(className);
     let { width, height } = container.getBoundingClientRect();
     this.initCanvasSize(width || WIDTH, height || HEIGHT);
   }

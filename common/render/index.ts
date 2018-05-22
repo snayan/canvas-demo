@@ -10,13 +10,17 @@ import styles from './index.scss';
 abstract class CommonRender {
   public isSingleModule: boolean;
   public el: HTMLDivElement;
+  public canvasContainer: HTMLDivElement;
+  public codesContainer: HTMLDivElement;
   public moduleName: string;
   public github: Github;
-  public canvas: Canvas[];
+  public canvasInstances: Canvas[];
   constructor(moduleName: string) {
-    this.canvas = [];
+    this.canvasInstances = [];
     this.moduleName = moduleName;
     this.el = document.createElement('div');
+    this.canvasContainer = document.createElement('div');
+    this.codesContainer = document.createElement('div');
     this.isSingleModule = isSingleModule(moduleName);
     this.github = new Github(moduleName);
     if (browser.mobile) {
@@ -26,25 +30,32 @@ abstract class CommonRender {
 
   private loading() {
     let el = document.createElement('i');
-    el.className = styles.loading;
+    el.classList.add(styles.loading);
     document.body.appendChild(el);
     return () => {
       document.body.removeChild(el);
     };
   }
   private renderCanvas() {
-    let container = document.createElement('div');
-    container.className = styles.result;
-    this.el.appendChild(container);
+    let container = this.canvasContainer;
+    let wrap = document.createElement('div');
+    wrap.classList.add(styles.result);
+    container.style.width = '100%';
+    container.style.height = '100%';
+    if (browser.mobile) {
+      wrap.classList.add(styles.mobileResult);
+    }
+    wrap.appendChild(container);
+    this.el.appendChild(wrap);
     setTimeout(() => {
-      for (let canvas of this.canvas) {
+      for (let canvas of this.canvasInstances) {
         canvas.render(container);
       }
     }, 0);
   }
 
   private async renderCode() {
-    let container = document.createElement('div');
+    let container = this.codesContainer;
     let code = document.createElement('div');
     let nav = document.createElement('nav');
     let naves = [];

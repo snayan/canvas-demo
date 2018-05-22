@@ -1,7 +1,7 @@
 import Canvas from 'common/canvas';
 import Star from './star';
 
-class BgCanvas extends Canvas {
+class MeteorCanvas extends Canvas {
   ctx: CanvasRenderingContext2D;
   font: string;
   meteorCount: number;
@@ -43,4 +43,4 @@ class BgCanvas extends Canvas {
   }
 }
 
-export default BgCanvas;
+export default MeteorCanvas;

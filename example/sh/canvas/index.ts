@@ -1,10 +1,10 @@
 import Canvas from 'common/canvas';
+import { windowToCanvas } from 'common/util';
 import BgCanvas from './bgCanvas';
 import ImgCanvas from './imgCanvas';
 import MeteorCanvas from './meteorCanvas';
 import LoadingCanvas from './loadingCanvas';
 import ApologizeCanvas from './apologizeCanvas';
-import styles from '../index.scss';
 
 let bgm = require('../audio/bgm.mp3');
 
@@ -72,9 +72,10 @@ class ShCanvas extends Canvas {
       let { x, y } = e;
       let { ctx, width, height } = this;
       let { btnLeft, btnTop, btnWidth, btnHeight } = this.apologizeCanvas;
+      let canvasPoint = windowToCanvas(this.el, x, y);
       ctx.beginPath();
       ctx.rect(btnLeft, btnTop, btnWidth, btnHeight);
-      if (ctx.isPointInPath(x, y)) {
+      if (ctx.isPointInPath(canvasPoint.x, canvasPoint.y)) {
         this.hasInteract = true;
         this.apologizeCanvas.drop();
         try {
@@ -108,7 +109,7 @@ class ShCanvas extends Canvas {
   }
   /* 渲染 */
   public async render(container: HTMLElement) {
-    super.render(container, styles.sh);
+    super.render(container);
     this.container.innerHTML = '';
     this.container.appendChild(this.el);
     this.bgCanvas = new BgCanvas(this.width, this.height);

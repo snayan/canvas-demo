@@ -16,3 +16,9 @@ export function isSingleModule(m: string) {
   let query = getQuery();
   return query && query.module === m;
 }
+
+/* translate window point to canvas point  */
+export function windowToCanvas(canvas: HTMLCanvasElement, x, y) {
+  let canvasRectangle = canvas.getBoundingClientRect();
+  return { x: x - canvasRectangle.left, y: y - canvasRectangle.top };
+}

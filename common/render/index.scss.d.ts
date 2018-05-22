@@ -9,6 +9,7 @@ export const codesSection: string;
 export const otherSection: string;
 export const activeSection: string;
 export const result: string;
+export const mobileResult: string;
 export const loading: string;
 export const spin: string;
 export const mobile: string;

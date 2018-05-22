@@ -1,7 +1,7 @@
 import Canvas from 'common/canvas';
 import Word from './word';
 
-class ButtonCanvas extends Canvas {
+class ApologizeCanvas extends Canvas {
   ctx: CanvasRenderingContext2D;
   btnWidth: number;
   btnHeight: number;
@@ -132,4 +132,4 @@ class ButtonCanvas extends Canvas {
   }
 }
 
-export default ButtonCanvas;
+export default ApologizeCanvas;

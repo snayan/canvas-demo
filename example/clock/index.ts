@@ -7,7 +7,7 @@ const moduleName = 'clock';
 export default class Clock extends CommonRender {
   constructor() {
     super(moduleName);
-    this.canvas.push(new ClockCanvas());
+    this.canvasInstances.push(new ClockCanvas());
   }
 }
 
