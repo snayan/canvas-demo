@@ -75,7 +75,11 @@ abstract class CommonRender {
       }
     } catch (e) {
       let msg = JSON.parse(e.message);
-      codes.push(`<div class='${styles.error}'><h4 class='${styles.errorTitle}'>[${msg.status}]${msg.statusText}</h4><p class='${styles.errorTip}'>${msg.body}</p></div>`);
+      codes.push(
+        `<div class='${styles.error}'><h4 class='${styles.errorTitle}'>[${msg.status}]${msg.statusText}</h4><p class='${styles.errorTip}'>${msg.url}</p><p class='${styles.errorTip}'>${
+          msg.body
+        }</p></div>`,
+      );
     }
     nav.addEventListener('click', (e: MouseEvent) => {
       let el = e.target as HTMLSpanElement;

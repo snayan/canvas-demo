@@ -55,6 +55,7 @@
 }
 
 .codesSection {
+  display: flex;
   flex: 1 1 auto;
   overflow: scroll;
   background: #f5f2f0;
@@ -131,6 +132,8 @@
 
 .error {
   display: flex;
+  flex: 1;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
 }

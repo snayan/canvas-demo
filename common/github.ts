@@ -50,6 +50,7 @@ class Github {
           status: res.status,
           statusText: res.statusText,
           body: await res.text(),
+          url: res.url,
         }),
       );
     }
