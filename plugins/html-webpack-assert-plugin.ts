@@ -21,6 +21,7 @@ class HtmlWebpackAssertPlugin {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=0">
     <title>${this.title}</title>
+    <script src="https://cdn.polyfill.io/v2/polyfill.min.js"></script>
     </head>
 <body>
     ${this.chunks
