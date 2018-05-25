@@ -74,24 +74,36 @@ class Axes {
   drawHorizontalTicks() {
     let { ctx, left, top, height, tickSize, numHorizontalTicks, horizontalTickSpacing } = this;
     ctx.beginPath();
+    let text;
+    let textWidth;
+    let textHeight = ctx.measureText('W').width;
     let x;
     let y = top + height;
     for (let i = 1; i < numHorizontalTicks; i++) {
       x = left + horizontalTickSpacing * i - 0.5;
       ctx.moveTo(x, y);
       ctx.lineTo(x, y - tickSize * (+!(i % 5) * 0.75 + 1));
+      text = i * horizontalTickSpacing / 10;
+      textWidth = ctx.measureText(text).width;
+      ctx.strokeText(text, x - textWidth / 2, y + textHeight + 6);
     }
     ctx.stroke();
   }
   drawVerticalTicks() {
     let { ctx, left, top, height, tickSize, numVerticalTicks, verticalTickSpacing } = this;
     ctx.beginPath();
+    let text;
+    let textWidth;
+    let textHeight = ctx.measureText('W').width;
     let x = left;
     let y;
     for (let i = 1; i < numVerticalTicks; i++) {
       y = top + height - verticalTickSpacing * i - 0.5;
       ctx.moveTo(x, y);
       ctx.lineTo(x + tickSize * (+!(i % 5) * 0.75 + 1), y);
+      text = i * verticalTickSpacing / 10;
+      textWidth = ctx.measureText(text).width;
+      ctx.strokeText(text, x - textWidth - 10, y + textHeight / 2);
     }
     ctx.stroke();
   }
