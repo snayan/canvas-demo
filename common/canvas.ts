@@ -21,6 +21,8 @@ abstract class Canvas {
     this.container = container;
     let { width, height } = container.getBoundingClientRect();
     this.initCanvasSize(width || WIDTH, height || HEIGHT);
+    this.container.innerHTML = '';
+    this.container.appendChild(this.el);
   }
 }
 

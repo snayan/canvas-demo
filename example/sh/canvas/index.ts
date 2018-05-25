@@ -110,8 +110,6 @@ class ShCanvas extends Canvas {
   /* 渲染 */
   public async render(container: HTMLElement) {
     super.render(container);
-    this.container.innerHTML = '';
-    this.container.appendChild(this.el);
     this.bgCanvas = new BgCanvas(this.width, this.height);
     this.meteorCanvas = new MeteorCanvas(this.width, this.height);
     this.loadingCanvas = new LoadingCanvas(this.width, this.height);
