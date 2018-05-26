@@ -8,7 +8,9 @@ export interface AxesOptions {
   height?: number;
   left?: number;
   top?: number;
-  color?: string;
+  axisColor?: string;
+  dataLineColor?: string;
+  dataLineWidth?: string;
   horizontalTickSpacing?: number;
   verticalTickSpacing?: number;
   tickSize?: number;
@@ -21,7 +23,9 @@ class Axes {
   height: number;
   left: number;
   top: number;
-  color: string;
+  axisColor: string;
+  dataLineColor: string;
+  dataLineWidth: number;
   minTickSpacing: number;
   horizontalTickSpacing: number;
   verticalTickSpacing: number;
@@ -40,14 +44,20 @@ class Axes {
     Object.assign(this, options);
     this.ctx = ctx;
     this.data = data.sort((a, b) => a.x - b.x);
-    if (!this.color) {
-      this.color = 'blue';
+    if (!this.axisColor) {
+      this.axisColor = 'blue';
     }
     if (!this.tickColor) {
       this.tickColor = 'navy';
     }
+    if (!this.dataLineColor) {
+      this.dataLineColor = '#D4A090';
+    }
     if (!this.tickLineWidth) {
       this.tickLineWidth = 0.5;
+    }
+    if (!this.dataLineWidth) {
+      this.dataLineWidth = 0.5;
     }
     if (!this.tickSize) {
       this.tickSize = 8;
@@ -60,8 +70,9 @@ class Axes {
     let { ctx, width, height, left, top, horizontalTickSpacing, verticalTickSpacing } = this;
     let canvasWidth = ctx.canvas.width;
     let canvasHeight = ctx.canvas.height;
-    width = width || (this.width = canvasWidth * 0.8);
-    height = height || (this.height = canvasHeight * 0.8);
+    let minSize = Math.min(canvasWidth, canvasHeight);
+    width = width || (this.width = minSize * 0.8);
+    height = height || (this.height = minSize * 0.8);
     left = +left;
     top = +top;
     if (Number.isNaN(left) || left < 0 || left > canvasWidth) {
@@ -182,16 +193,18 @@ class Axes {
     ctx.restore();
   }
   render() {
-    let { ctx, color, tickColor, tickLineWidth } = this;
+    let { ctx, axisColor, tickColor, dataLineColor, dataLineWidth, tickLineWidth } = this;
     ctx.save();
     ctx.lineWidth = 0.5;
-    ctx.strokeStyle = color;
+    ctx.strokeStyle = axisColor;
     this.drawHorizontalAxis();
     this.drawVerticalAxis();
     ctx.lineWidth = tickLineWidth;
     ctx.strokeStyle = tickColor;
     this.drawHorizontalTicks();
     this.drawVerticalTicks();
+    ctx.lineWidth = dataLineWidth;
+    ctx.strokeStyle = dataLineColor;
     this.drawData();
     ctx.restore();
   }

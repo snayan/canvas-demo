@@ -14,7 +14,7 @@ class AxesCanvas extends Canvas {
     this.initData();
   }
   initData() {
-    let rangeX = [0, 1000];
+    let rangeX = [0, 100];
     let rangeY = [0, 100];
     let count = 10;
     let data = [];
