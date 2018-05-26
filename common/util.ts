@@ -22,3 +22,8 @@ export function windowToCanvas(canvas: HTMLCanvasElement, x, y) {
   let canvasRectangle = canvas.getBoundingClientRect();
   return { x: x - canvasRectangle.left, y: y - canvasRectangle.top };
 }
+
+/* export random between min and max */
+export function random(min, max) {
+  return Math.random() * (max - min) + min;
+}
