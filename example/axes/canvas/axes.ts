@@ -1,21 +1,17 @@
+import browser from 'common/browser';
+
 export interface AxesData {
   x: number;
   y: number;
 }
 
 export interface AxesOptions {
-  width?: number;
-  height?: number;
-  left?: number;
-  top?: number;
   axisColor?: string;
   dataLineColor?: string;
-  dataLineWidth?: string;
-  horizontalTickSpacing?: number;
-  verticalTickSpacing?: number;
-  tickSize?: number;
   tickColor?: string;
   tickLineWidth?: number;
+  dataLineWidth?: number;
+  guideColor?: string;
 }
 
 class Axes {
@@ -25,6 +21,7 @@ class Axes {
   top: number;
   axisColor: string;
   dataLineColor: string;
+  guideColor: string;
   dataLineWidth: number;
   minTickSpacing: number;
   horizontalTickSpacing: number;
@@ -40,55 +37,51 @@ class Axes {
   yPerTick: number;
   startX: number;
   startY: number;
+  cacheImgData: any;
   constructor(ctx: CanvasRenderingContext2D, data: AxesData[], options?: AxesOptions) {
-    Object.assign(this, options);
+    let defaultOptions = { axisColor: '#000', tickColor: '#666', dataLineColor: '#DE0B27', guideColor: 'rgba(0,0,230,0.4)', tickLineWidth: 1, dataLineWidth: 1 };
+    let opts = { ...defaultOptions, ...options };
     this.ctx = ctx;
     this.data = data.sort((a, b) => a.x - b.x);
-    if (!this.axisColor) {
-      this.axisColor = 'blue';
-    }
-    if (!this.tickColor) {
-      this.tickColor = 'navy';
-    }
-    if (!this.dataLineColor) {
-      this.dataLineColor = '#D4A090';
-    }
-    if (!this.tickLineWidth) {
-      this.tickLineWidth = 0.5;
-    }
-    if (!this.dataLineWidth) {
-      this.dataLineWidth = 0.5;
-    }
-    if (!this.tickSize) {
-      this.tickSize = 8;
-    }
+    this.axisColor = opts.axisColor;
+    this.tickColor = opts.tickColor;
+    this.dataLineColor = opts.dataLineColor;
+    this.guideColor = opts.guideColor;
+    this.tickLineWidth = opts.tickLineWidth;
+    this.dataLineWidth = opts.dataLineWidth;
+    this.tickSize = browser.pc ? 6 : 4;
     this.minTickSpacing = 10;
+    this.horizontalTickSpacing = 10;
+    this.verticalTickSpacing = 10;
     this.computeSize();
     this.computeDelta();
   }
-  computeSize() {
-    let { ctx, width, height, left, top, horizontalTickSpacing, verticalTickSpacing } = this;
+  private saveDrawingSurface() {
+    let { ctx } = this;
+    let canvas = ctx.canvas;
+    this.cacheImgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+  }
+  private restoreDrawingSurface() {
+    let { ctx, cacheImgData } = this;
+    let canvas = ctx.canvas;
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.putImageData(cacheImgData, 0, 0);
+  }
+  private computeSize() {
+    let { ctx, horizontalTickSpacing, verticalTickSpacing } = this;
     let canvasWidth = ctx.canvas.width;
     let canvasHeight = ctx.canvas.height;
     let minSize = Math.min(canvasWidth, canvasHeight);
-    width = width || (this.width = minSize * 0.8);
-    height = height || (this.height = minSize * 0.8);
-    left = +left;
-    top = +top;
-    if (Number.isNaN(left) || left < 0 || left > canvasWidth) {
-      left = (canvasWidth - width) / 2;
-    }
-    if (Number.isNaN(top) || top < 0 || top > canvasHeight) {
-      top = (canvasHeight - height) / 2;
-    }
-    this.left = left;
-    this.top = top;
-    horizontalTickSpacing = horizontalTickSpacing || (this.horizontalTickSpacing = 10);
-    verticalTickSpacing = verticalTickSpacing || (this.verticalTickSpacing = 10);
+    let width = minSize * 0.8;
+    let height = minSize * 0.8;
+    this.left = (canvasWidth - width) / 2;
+    this.top = (canvasHeight - height) / 2;
     this.numHorizontalTicks = Math.floor(width / horizontalTickSpacing);
     this.numVerticalTicks = Math.floor(height / verticalTickSpacing);
+    this.width = width;
+    this.height = height;
   }
-  computeDelta() {
+  private computeDelta() {
     let { data, numHorizontalTicks, numVerticalTicks } = this;
     let maxX = Number.MIN_SAFE_INTEGER;
     let minX = Number.MAX_SAFE_INTEGER;
@@ -109,29 +102,21 @@ class Axes {
     this.startX = Math.floor(this.startX);
     this.startY = Math.floor(this.startY);
   }
-  toCanvasX(x) {
-    let { left, startX, xPerTick, horizontalTickSpacing } = this;
-    return left + (x - startX) * horizontalTickSpacing / xPerTick;
-  }
-  toCanvasY(y) {
-    let { top, height, startY, yPerTick, verticalTickSpacing } = this;
-    return top + height - (y - startY) * verticalTickSpacing / yPerTick;
-  }
-  drawHorizontalAxis() {
-    let { ctx, left, top, width, height } = this;
+  private drawHorizontalLine(y: number) {
+    let { ctx, left, width } = this;
     ctx.beginPath();
-    ctx.moveTo(left, top + height - 0.5);
-    ctx.lineTo(left + width, top + height - 0.5);
+    ctx.moveTo(left, y - 0.5);
+    ctx.lineTo(left + width, y - 0.5);
     ctx.stroke();
   }
-  drawVerticalAxis() {
+  private drawVerticalLine(x: number) {
     let { ctx, left, top, height } = this;
     ctx.beginPath();
-    ctx.moveTo(left - 0.5, top + height);
-    ctx.lineTo(left - 0.5, top);
+    ctx.moveTo(x - 0.5, top + height);
+    ctx.lineTo(x - 0.5, top);
     ctx.stroke();
   }
-  drawHorizontalTicks() {
+  private drawHorizontalTicks() {
     let { ctx, data, left, top, width, height, xPerTick, startX, tickSize, numHorizontalTicks, horizontalTickSpacing } = this;
     ctx.beginPath();
     let text;
@@ -153,7 +138,7 @@ class Axes {
     }
     ctx.stroke();
   }
-  drawVerticalTicks() {
+  private drawVerticalTicks() {
     let { ctx, left, top, height, yPerTick, startY, tickSize, numVerticalTicks, verticalTickSpacing } = this;
     ctx.beginPath();
     let text;
@@ -175,7 +160,7 @@ class Axes {
     }
     ctx.stroke();
   }
-  drawData() {
+  private drawData() {
     let { ctx, data } = this;
     ctx.save();
     ctx.beginPath();
@@ -192,13 +177,37 @@ class Axes {
     ctx.stroke();
     ctx.restore();
   }
-  render() {
-    let { ctx, axisColor, tickColor, dataLineColor, dataLineWidth, tickLineWidth } = this;
+  private toCanvasX(x) {
+    let { left, startX, xPerTick, horizontalTickSpacing } = this;
+    return left + (x - startX) * horizontalTickSpacing / xPerTick;
+  }
+  private toCanvasY(y) {
+    let { top, height, startY, yPerTick, verticalTickSpacing } = this;
+    return top + height - (y - startY) * verticalTickSpacing / yPerTick;
+  }
+  private showPoint(x: number, y: number) {
+    console.log(x, y);
+  }
+  public drawGuide(x: number, y: number) {
+    console.log(x, y);
+    let { ctx, left, top, width, height, guideColor } = this;
+    if (x > left && x < left + width && y > top && y < top + height) {
+      this.restoreDrawingSurface();
+      ctx.save();
+      ctx.strokeStyle = guideColor;
+      ctx.lineWidth = 0.5;
+      this.drawHorizontalLine(y);
+      this.drawVerticalLine(x);
+      ctx.restore();
+    }
+  }
+  public render() {
+    let { ctx, left, top, height, axisColor, tickColor, dataLineColor, dataLineWidth, tickLineWidth } = this;
     ctx.save();
     ctx.lineWidth = 0.5;
     ctx.strokeStyle = axisColor;
-    this.drawHorizontalAxis();
-    this.drawVerticalAxis();
+    this.drawHorizontalLine(top + height);
+    this.drawVerticalLine(left);
     ctx.lineWidth = tickLineWidth;
     ctx.strokeStyle = tickColor;
     this.drawHorizontalTicks();
@@ -207,6 +216,7 @@ class Axes {
     ctx.strokeStyle = dataLineColor;
     this.drawData();
     ctx.restore();
+    this.saveDrawingSurface();
   }
 }
 

@@ -1,7 +1,7 @@
 import Canvas from 'common/canvas';
 import Grid from './grid';
 import Axes, { AxesData } from './axes';
-import { random } from 'common/util';
+import { random, windowToCanvas } from 'common/util';
 
 class AxesCanvas extends Canvas {
   ctx: CanvasRenderingContext2D;
@@ -12,6 +12,7 @@ class AxesCanvas extends Canvas {
     super();
     this.ctx = this.getContext('2d');
     this.initData();
+    this.bindMouseEvent();
   }
   initData() {
     let rangeX = [0, 100];
@@ -26,11 +27,19 @@ class AxesCanvas extends Canvas {
     }
     this.data = data;
   }
+  bindMouseEvent() {
+    let { el } = this;
+    el.addEventListener('mousemove', (e: MouseEvent) => {
+      let { x, y } = e;
+      let canvasPoint = windowToCanvas(el, x, y);
+      this.axes.drawGuide(canvasPoint.x, canvasPoint.y);
+    });
+  }
   render(container: HTMLElement) {
     super.render(container);
-    this.grid = new Grid(this.ctx);
+    // this.grid = new Grid(this.ctx);
     this.axes = new Axes(this.ctx, this.data);
-    this.grid.render();
+    // this.grid.render();
     this.axes.render();
   }
 }

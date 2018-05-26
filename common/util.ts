@@ -19,8 +19,8 @@ export function isSingleModule(m: string) {
 
 /* translate window point to canvas point  */
 export function windowToCanvas(canvas: HTMLCanvasElement, x, y) {
-  let canvasRectangle = canvas.getBoundingClientRect();
-  return { x: x - canvasRectangle.left, y: y - canvasRectangle.top };
+  let box = canvas.getBoundingClientRect();
+  return { x: x - box.left * (canvas.width / box.width), y: y - box.top * (canvas.height / box.height) };
 }
 
 /* export random between min and max */
