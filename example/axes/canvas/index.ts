@@ -1,7 +1,8 @@
 import Canvas from 'common/canvas';
 import Grid from './grid';
 import Axes, { AxesData } from './axes';
-import { random, windowToCanvas } from 'common/util';
+import browser from 'common/browser';
+import { random, windowToCanvas, throttle } from 'common/util';
 
 class AxesCanvas extends Canvas {
   ctx: CanvasRenderingContext2D;
@@ -29,11 +30,13 @@ class AxesCanvas extends Canvas {
   }
   bindMouseEvent() {
     let { el } = this;
-    el.addEventListener('mousemove', (e: MouseEvent) => {
-      let { x, y } = e;
-      let canvasPoint = windowToCanvas(el, x, y);
-      this.axes.drawGuide(canvasPoint.x, canvasPoint.y);
-    });
+    el.addEventListener(browser.mobile ? 'touchmove' : 'mousemove', throttle(this.drawGuide.bind(this), 100));
+  }
+  drawGuide(e: MouseEvent) {
+    let { x, y } = e;
+    let { el } = this;
+    let canvasPoint = windowToCanvas(el, x, y);
+    this.axes.drawGuide(canvasPoint.x, canvasPoint.y);
   }
   render(container: HTMLElement) {
     super.render(container);

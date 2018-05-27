@@ -164,17 +164,33 @@ class Axes {
     let { ctx, data } = this;
     ctx.save();
     ctx.beginPath();
+    let radius = 3;
     let len = data.length;
     let point;
+    let x;
+    let y;
     if (len) {
       point = data[0];
-      ctx.moveTo(this.toCanvasX(point.x), this.toCanvasY(point.y));
+      x = this.toCanvasX(point.x);
+      y = this.toCanvasY(point.y);
+      ctx.moveTo(x, y);
     }
     for (let i = 1; i < len; i++) {
       point = data[i];
-      ctx.lineTo(this.toCanvasX(point.x), this.toCanvasY(point.y));
+      x = this.toCanvasX(point.x);
+      y = this.toCanvasY(point.y);
+      ctx.lineTo(x, y);
     }
     ctx.stroke();
+    for (let i = 0; i < len; i++) {
+      ctx.beginPath();
+      point = data[i];
+      x = this.toCanvasX(point.x);
+      y = this.toCanvasY(point.y);
+      ctx.arc(x, y, radius, 0, Math.PI * 2, false);
+      ctx.fill();
+    }
+    ctx.fill();
     ctx.restore();
   }
   private toCanvasX(x) {
@@ -185,11 +201,15 @@ class Axes {
     let { top, height, startY, yPerTick, verticalTickSpacing } = this;
     return top + height - (y - startY) * verticalTickSpacing / yPerTick;
   }
-  private showPoint(x: number, y: number) {
-    console.log(x, y);
+  private toDataX(x: number) {
+    let { left, startX, xPerTick, horizontalTickSpacing } = this;
+    return ((x - left) * xPerTick / horizontalTickSpacing + startX).toFixed(2);
+  }
+  private toDataY(y: number) {
+    let { top, height, startY, yPerTick, verticalTickSpacing } = this;
+    return ((top + height - y) * yPerTick / verticalTickSpacing + startY).toFixed(2);
   }
   public drawGuide(x: number, y: number) {
-    console.log(x, y);
     let { ctx, left, top, width, height, guideColor } = this;
     if (x > left && x < left + width && y > top && y < top + height) {
       this.restoreDrawingSurface();
@@ -198,6 +218,7 @@ class Axes {
       ctx.lineWidth = 0.5;
       this.drawHorizontalLine(y);
       this.drawVerticalLine(x);
+      ctx.strokeText(`${this.toDataX(x)} , ${this.toDataY(y)}`, x + 10, y + 10);
       ctx.restore();
     }
   }
@@ -214,6 +235,7 @@ class Axes {
     this.drawVerticalTicks();
     ctx.lineWidth = dataLineWidth;
     ctx.strokeStyle = dataLineColor;
+    ctx.fillStyle = dataLineColor;
     this.drawData();
     ctx.restore();
     this.saveDrawingSurface();
