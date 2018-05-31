@@ -52,7 +52,7 @@ class ShCanvas extends Canvas {
   /* 加载BGM */
   private loadBgm() {
     let audio = document.createElement('audio');
-    document.body.appendChild(audio);
+    this.el.appendChild(audio);
     this.audioElement = audio;
     let playPromise;
     audio.muted = false;

@@ -26,6 +26,8 @@ class Grid {
     this.axisSpaceY = options.axisSpaceY || 10;
     this.initGrid();
   }
+
+  /* 初始化网格数据 */
   initGrid() {
     let { ctx, width, height, axisSpaceX, axisSpaceY } = this;
     let canvasWidth = ctx.canvas.width;
@@ -39,6 +41,8 @@ class Grid {
     this.axisSpaceX = gridWidth / this.numHorizontalStep;
     this.axisSpaceY = gridHeight / this.numVerticalStep;
   }
+
+  /* 渲染网格 */
   render() {
     let { ctx, width, height, lineColor, axisSpaceX, axisSpaceY, numHorizontalStep, numVerticalStep } = this;
     ctx.save();

@@ -56,17 +56,23 @@ class Axes {
     this.computeSize();
     this.computeDelta();
   }
+
+  /* 保存当前canvas数据 */
   private saveDrawingSurface() {
     let { ctx } = this;
     let canvas = ctx.canvas;
     this.cacheImgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
   }
+
+  /* 恢复保存的canvas数据 */
   private restoreDrawingSurface() {
     let { ctx, cacheImgData } = this;
     let canvas = ctx.canvas;
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.putImageData(cacheImgData, 0, 0);
   }
+
+  /* 计算坐标轴 */
   private computeSize() {
     let { ctx, horizontalTickSpacing, verticalTickSpacing } = this;
     let canvasWidth = ctx.canvas.width;
@@ -81,6 +87,8 @@ class Axes {
     this.width = width;
     this.height = height;
   }
+
+  /* 计算数据 */
   private computeDelta() {
     let { data, numHorizontalTicks, numVerticalTicks } = this;
     let maxX = Number.MIN_SAFE_INTEGER;
@@ -102,6 +110,8 @@ class Axes {
     this.startX = Math.floor(this.startX);
     this.startY = Math.floor(this.startY);
   }
+
+  /* 绘制水平线 */
   private drawHorizontalLine(y: number) {
     let { ctx, left, width } = this;
     ctx.beginPath();
@@ -109,6 +119,8 @@ class Axes {
     ctx.lineTo(left + width, y - 0.5);
     ctx.stroke();
   }
+
+  /* 绘制垂直线 */
   private drawVerticalLine(x: number) {
     let { ctx, left, top, height } = this;
     ctx.beginPath();
@@ -116,6 +128,8 @@ class Axes {
     ctx.lineTo(x - 0.5, top);
     ctx.stroke();
   }
+
+  /* 绘制水平刻度 */
   private drawHorizontalTicks() {
     let { ctx, data, left, top, width, height, xPerTick, startX, tickSize, numHorizontalTicks, horizontalTickSpacing } = this;
     ctx.beginPath();
@@ -138,6 +152,8 @@ class Axes {
     }
     ctx.stroke();
   }
+
+  /* 绘制垂直刻度 */
   private drawVerticalTicks() {
     let { ctx, left, top, height, yPerTick, startY, tickSize, numVerticalTicks, verticalTickSpacing } = this;
     ctx.beginPath();
@@ -160,6 +176,8 @@ class Axes {
     }
     ctx.stroke();
   }
+
+  /* 绘制数据点 */
   private drawData() {
     let { ctx, data } = this;
     ctx.save();
@@ -193,22 +211,32 @@ class Axes {
     ctx.fill();
     ctx.restore();
   }
+
+  /* 将坐标数据X转换为canvas上X坐标值 */
   private toCanvasX(x) {
     let { left, startX, xPerTick, horizontalTickSpacing } = this;
     return left + (x - startX) * horizontalTickSpacing / xPerTick;
   }
+
+  /* 将坐标数据Y转换为canvas上Y坐标值 */
   private toCanvasY(y) {
     let { top, height, startY, yPerTick, verticalTickSpacing } = this;
     return top + height - (y - startY) * verticalTickSpacing / yPerTick;
   }
+
+  /* 将canvas坐标X上的值转为数据坐标X的值 */
   private toDataX(x: number) {
     let { left, startX, xPerTick, horizontalTickSpacing } = this;
     return ((x - left) * xPerTick / horizontalTickSpacing + startX).toFixed(2);
   }
+
+  /* 将canvas坐标Y上的值转为数据坐标Y的值 */
   private toDataY(y: number) {
     let { top, height, startY, yPerTick, verticalTickSpacing } = this;
     return ((top + height - y) * yPerTick / verticalTickSpacing + startY).toFixed(2);
   }
+
+  /* 绘制提示线 */
   public drawGuide(x: number, y: number) {
     let { ctx, left, top, width, height, guideColor } = this;
     if (x > left && x < left + width && y > top && y < top + height) {
@@ -222,6 +250,8 @@ class Axes {
       ctx.restore();
     }
   }
+
+  /* 绘制 */
   public render() {
     let { ctx, left, top, height, axisColor, tickColor, dataLineColor, dataLineWidth, tickLineWidth } = this;
     ctx.save();

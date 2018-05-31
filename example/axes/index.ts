@@ -4,7 +4,7 @@ import AxesCanvas from './canvas';
 
 const moduleName = 'axes';
 
-class Axes extends CommonRender {
+export default class Axes extends CommonRender {
   canvasInstances: AxesCanvas[];
   constructor() {
     super(moduleName);

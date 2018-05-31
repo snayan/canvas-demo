@@ -2,6 +2,7 @@
 import { Base64 } from 'js-base64';
 import Canvas from '../canvas';
 import { isSingleModule } from '../util';
+import { LINK } from '../CONSTANT';
 import Github, { GitHubApiResult } from '../github';
 import browser from '../browser';
 import Prism from 'prismjs';
@@ -15,6 +16,7 @@ abstract class CommonRender {
   public moduleName: string;
   public github: Github;
   public canvasInstances: Canvas[];
+  public link: string;
   constructor(moduleName: string) {
     this.canvasInstances = [];
     this.moduleName = moduleName;
@@ -23,6 +25,7 @@ abstract class CommonRender {
     this.codesContainer = document.createElement('div');
     this.isSingleModule = isSingleModule(moduleName);
     this.github = new Github(moduleName);
+    this.link = `${LINK}?module=${moduleName}`;
     if (browser.mobile) {
       this.el.classList.add(styles.mobile);
     }
@@ -36,6 +39,7 @@ abstract class CommonRender {
       document.body.removeChild(el);
     };
   }
+
   private renderCanvas() {
     let container = this.canvasContainer;
     let wrap = document.createElement('div');
@@ -110,10 +114,20 @@ abstract class CommonRender {
 
   public async render() {
     let removeLoading = this.loading();
-    document.body.insertBefore(this.el, document.body.firstChild);
+    document.body.appendChild(this.el);
     if (this.isSingleModule) {
       this.el.classList.add(styles.single);
       browser.pc && (await this.renderCode());
+    } else {
+      this.el.classList.add(styles.collect);
+      let link = document.createElement('a');
+      link.innerText = this.moduleName;
+      link.href = this.link;
+      link.style.marginTop = '10px';
+      this.el.appendChild(link);
+    }
+    if (browser.mobile) {
+      this.el.classList.add(styles.collectMobile);
     }
     this.renderCanvas();
     removeLoading();

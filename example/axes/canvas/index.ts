@@ -15,6 +15,8 @@ class AxesCanvas extends Canvas {
     this.initData();
     this.bindMouseEvent();
   }
+
+  /* 初始化随机数据 */
   initData() {
     let rangeX = [0, 100];
     let rangeY = [0, 100];
@@ -28,16 +30,22 @@ class AxesCanvas extends Canvas {
     }
     this.data = data;
   }
+
+  /* 绑定鼠标移动事件 */
   bindMouseEvent() {
     let { el } = this;
     el.addEventListener(browser.mobile ? 'touchmove' : 'mousemove', throttle(this.drawGuide.bind(this), 100));
   }
+
+  /* 绘制提示线 */
   drawGuide(e: MouseEvent) {
     let { x, y } = e;
     let { el } = this;
     let canvasPoint = windowToCanvas(el, x, y);
     this.axes.drawGuide(canvasPoint.x, canvasPoint.y);
   }
+
+  /* 渲染 */
   render(container: HTMLElement) {
     super.render(container);
     // this.grid = new Grid(this.ctx);
