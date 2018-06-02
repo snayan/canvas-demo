@@ -126,7 +126,7 @@ abstract class CommonRender {
       link.style.marginTop = '10px';
       this.el.appendChild(link);
     }
-    if (browser.mobile) {
+    if (browser.mobile && !this.isSingleModule) {
       this.el.classList.add(styles.collectMobile);
     }
     this.renderCanvas();
