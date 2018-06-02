@@ -11,8 +11,6 @@ import styles from './index.scss';
 abstract class CommonRender {
   public isSingleModule: boolean;
   public el: HTMLDivElement;
-  public canvasContainer: HTMLDivElement;
-  public codesContainer: HTMLDivElement;
   public moduleName: string;
   public github: Github;
   public canvasInstances: Canvas[];
@@ -21,8 +19,6 @@ abstract class CommonRender {
     this.canvasInstances = [];
     this.moduleName = moduleName;
     this.el = document.createElement('div');
-    this.canvasContainer = document.createElement('div');
-    this.codesContainer = document.createElement('div');
     this.isSingleModule = isSingleModule(moduleName);
     this.github = new Github(moduleName);
     this.link = `${LINK}?module=${moduleName}`;
@@ -41,25 +37,37 @@ abstract class CommonRender {
   }
 
   private renderCanvas() {
-    let container = this.canvasContainer;
+    let count = this.canvasInstances.length;
     let wrap = document.createElement('div');
     wrap.classList.add(styles.result);
-    container.style.width = '100%';
-    container.style.height = '100%';
     if (browser.mobile) {
       wrap.classList.add(styles.mobileResult);
     }
-    wrap.appendChild(container);
     this.el.appendChild(wrap);
-    setTimeout(() => {
-      for (let canvas of this.canvasInstances) {
-        canvas.render(container);
-      }
-    }, 0);
+    if (count > 0) {
+      setTimeout(() => {
+        let { width, height } = wrap.getBoundingClientRect();
+        let widthMax = width > height;
+        let container = document.createElement('div');
+        container.style.display = 'inline-block';
+        if (widthMax) {
+          container.style.width = `${100 / count}%`;
+          container.style.height = '100%';
+        } else {
+          container.style.width = '100%';
+          container.style.height = `${100 / count}%`;
+        }
+        for (let canvas of this.canvasInstances) {
+          let clone = container.cloneNode() as HTMLElement;
+          wrap.appendChild(clone);
+          canvas.render(clone);
+        }
+      }, 0);
+    }
   }
 
   private async renderCode() {
-    let container = this.codesContainer;
+    let container = document.createElement('div');
     let code = document.createElement('div');
     let nav = document.createElement('nav');
     let naves = [];
@@ -79,11 +87,7 @@ abstract class CommonRender {
       }
     } catch (e) {
       let msg = JSON.parse(e.message);
-      codes.push(
-        `<div class='${styles.error}'><h4 class='${styles.errorTitle}'>[${msg.status}]${msg.statusText}</h4><p class='${styles.errorTip}'>${msg.url}</p><p class='${styles.errorTip}'>${
-          msg.body
-        }</p></div>`,
-      );
+      codes.push(`<div class='${styles.error}'><h4 class='${styles.errorTitle}'>[${msg.status}]${msg.statusText}</h4><p class='${styles.errorTip}'>${msg.url}</p></div>`);
     }
     nav.addEventListener('click', (e: MouseEvent) => {
       let el = e.target as HTMLSpanElement;
