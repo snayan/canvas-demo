@@ -39,6 +39,7 @@ class AxesCanvas extends Canvas {
 
   /* 绘制提示线 */
   drawGuide(e: MouseEvent | TouchEvent) {
+    e.preventDefault();
     let x;
     let y;
     let { el } = this;
