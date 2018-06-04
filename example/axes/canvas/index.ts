@@ -34,12 +34,24 @@ class AxesCanvas extends Canvas {
   /* 绑定鼠标移动事件 */
   bindMouseEvent() {
     let { el } = this;
-    el.addEventListener(browser.mobile ? 'touchmove' : 'mousemove', throttle(this.drawGuide.bind(this), 100));
+    let passiveSupported = false;
+
+    try {
+      window.addEventListener(
+        'test',
+        null,
+        Object.defineProperty({}, 'passive', {
+          get: function() {
+            passiveSupported = true;
+          },
+        }),
+      );
+    } catch (err) {}
+    el.addEventListener(browser.mobile ? 'touchmove' : 'mousemove', throttle(this.drawGuide.bind(this), 100), passiveSupported ? { passive: false } : false);
   }
 
   /* 绘制提示线 */
   drawGuide(e: MouseEvent | TouchEvent) {
-    e.preventDefault();
     let x;
     let y;
     let { el } = this;
