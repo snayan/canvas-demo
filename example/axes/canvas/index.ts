@@ -38,9 +38,18 @@ class AxesCanvas extends Canvas {
   }
 
   /* 绘制提示线 */
-  drawGuide(e: MouseEvent) {
-    let { x, y } = e;
+  drawGuide(e: MouseEvent | TouchEvent) {
+    let x;
+    let y;
     let { el } = this;
+    if (browser.pc) {
+      e = e as MouseEvent;
+      x = e.x;
+      y = e.y;
+    } else {
+      x = (e as TouchEvent).changedTouches[0].pageX;
+      y = (e as TouchEvent).changedTouches[0].pageY;
+    }
     let canvasPoint = windowToCanvas(el, x, y);
     this.axes.drawGuide(canvasPoint.x, canvasPoint.y);
   }
