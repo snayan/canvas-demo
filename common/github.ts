@@ -34,6 +34,9 @@ class Github {
     return fetch(`${this.requestPath}/${path}`, { credentials: 'omit', method: 'get', mode: 'cors' });
   }
   public async getCanvasFiles() {
+    if (process.env.NODE_ENV !== 'production') {
+      throw new Error(JSON.stringify({ status: '400', statusText: 'forbidden', url: "development env don't request code" }));
+    }
     let files: GitHubApiResult[];
     let contents: GitHubApiResult[] = [];
     let storages: StorageValue = storage.get(this.moduleName);
