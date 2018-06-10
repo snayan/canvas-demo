@@ -2,7 +2,6 @@ import Canvas from 'common/canvas';
 import browser from 'common/browser';
 import { windowToCanvas } from 'common/util';
 import Cursor from './cursor';
-// import Word from './word';
 
 interface Line {
   left: number;
@@ -12,13 +11,18 @@ interface Line {
   words: string[];
 }
 
+interface WordPoint {
+  lineNum: number;
+  wordIndex: number;
+}
+
 class EditorCanvas extends Canvas {
   ctx: CanvasRenderingContext2D;
   cursor: Cursor;
   margin: number;
   lineHeight: number;
   lines: Line[];
-  currentLine: number;
+  nextWord: WordPoint;
   fontSize: number;
   letterSpace: number;
   editorAreaWidth: number;
@@ -34,7 +38,10 @@ class EditorCanvas extends Canvas {
     this.lineHeight = this.fontSize * 2;
     this.margin = 20;
     this.lines = [];
-    this.currentLine = -1;
+    this.nextWord = {
+      lineNum: 0,
+      wordIndex: 0,
+    };
     this.focus = false;
   }
 
@@ -52,12 +59,19 @@ class EditorCanvas extends Canvas {
     }
   }
 
+  /* 计算一个大致的字的宽度 */
+  calculateWordWidth() {
+    let { ctx } = this;
+    let wordWidth = ctx.measureText('M').width;
+    return wordWidth;
+  }
+
   /* 计算字间距 */
   calculateLetterSpace() {
     let { ctx, lines } = this;
-    let wordWidth = ctx.measureText('M').width;
+    let wordWidth = this.calculateWordWidth();
     let lineWidth = lines[0].width;
-    let words = Math.floor(lineWidth / (wordWidth + wordWidth / 2));
+    let words = Math.floor(lineWidth / (wordWidth + wordWidth / 4));
     this.letterSpace = (lineWidth - words * wordWidth) / (words - 1);
   }
 
@@ -80,31 +94,71 @@ class EditorCanvas extends Canvas {
   }
 
   /* 测量当前行已经使用的宽度 */
-  measureLineText(num) {
+  measureLineText(lineNum, wordIndex) {
     let { ctx, lines, letterSpace } = this;
-    let line = lines[num];
+    let line = lines[lineNum];
     let words = line.words;
-    let wordsNum = words.length;
-    if (wordsNum === 0) {
+    if (!words.length || wordIndex < 0) {
       return 0;
     }
-    let wordsWidth = ctx.measureText(words.join('')).width;
-    let spacesWidth = letterSpace * (wordsNum - 1);
+    let wordsWidth = ctx.measureText(words.slice(0, wordIndex + 1).join('')).width;
+    let spacesWidth = letterSpace * wordIndex;
     return wordsWidth + spacesWidth;
   }
 
   /* 找出下一个字的位置 */
-  findNextWord() {
-    let { ctx, currentLine, lines, letterSpace, editorAreaLeft } = this;
-    let line = lines[currentLine];
-    let words = line.words;
-    let wordsNum = words.length;
-    let wordsWidth = ctx.measureText(words.join('')).width;
-    let spacesWidth = letterSpace * wordsNum;
-    return {
-      left: editorAreaLeft + wordsWidth + spacesWidth,
-      bottom: line.bottom - 1,
+  calculateNextWord(x, y) {
+    let { ctx, lines, editorAreaLeft } = this;
+    let num = this.findLineByPoint(x, y);
+    let line = lines[num];
+    if (line) {
+      let wordsLen = line.words.length;
+      let index = 0;
+      let lineTextWidth = this.measureLineText(num, index);
+      while (lineTextWidth < x - editorAreaLeft && index < wordsLen) {
+        index += 1;
+        lineTextWidth = this.measureLineText(num, index);
+      }
+      this.nextWord = {
+        lineNum: num,
+        wordIndex: index,
+      };
+    }
+  }
+
+  /* 移动下一个位置 */
+  advanceNextWord() {
+    let { nextWord, lines, editorAreaWidth, letterSpace } = this;
+    let { lineNum, wordIndex } = nextWord;
+    let line = lines[lineNum];
+    let wordWidth = this.calculateWordWidth();
+    let lineTextWidth = this.measureLineText(lineNum, wordIndex);
+    if (lineTextWidth + wordWidth + letterSpace > editorAreaWidth) {
+      lineNum += 1;
+      wordIndex = 0;
+    } else {
+      wordIndex += 1;
+    }
+    this.nextWord = {
+      lineNum,
+      wordIndex,
     };
+  }
+
+  /* 由于中途添加了字，需重组文字 */
+  reorganizeWords(lineNum: number) {
+    let { lines, editorAreaWidth } = this;
+    let totalLines = lines.length;
+    let wordIndex = lines[lineNum].words.length - 1;
+    let overWord;
+    while (this.measureLineText(lineNum, wordIndex) > editorAreaWidth && lineNum < totalLines) {
+      overWord = lines[lineNum].words.splice(wordIndex, 1)[0];
+      lineNum += 1;
+      if (lineNum < totalLines) {
+        lines[lineNum].words.unshift(overWord);
+        wordIndex = lines[lineNum].words.length - 1;
+      }
+    }
   }
 
   /* 根据当前的坐标找出当前行 */
@@ -118,21 +172,21 @@ class EditorCanvas extends Canvas {
     return line;
   }
 
-  /* 根据当前的坐标找出当前字的位置 */
-  findCursorByLine(num) {
-    let { ctx, lines, letterSpace, editorAreaLeft, editorAreaWidth } = this;
-    let line = lines[num];
-    if (line) {
-      let words = line.words;
-      let wordsNum = words.length;
-      let wordsWidth = ctx.measureText(words.join('')).width;
-      let spacesWidth = letterSpace * wordsNum;
-      return {
-        left: editorAreaLeft + wordsWidth + spacesWidth,
-        bottom: line.bottom - 1,
-      };
-    }
-    return null;
+  /* 添加文字 */
+  addWord(word: string) {
+    let { ctx, lines, letterSpace, nextWord } = this;
+    let { lineNum, wordIndex } = nextWord;
+    let line = lines[lineNum];
+    let words = line.words;
+    wordIndex = Math.min(wordIndex, words.length);
+    words.splice(wordIndex, 0, word);
+    this.advanceNextWord();
+    this.reorganizeWords(lineNum);
+  }
+
+  /* 删除文字 */
+  removeWord(currentWord: WordPoint) {
+    console.log(currentWord);
   }
 
   /* 绑定聚焦事件 */
@@ -141,17 +195,11 @@ class EditorCanvas extends Canvas {
       'click',
       (e) => {
         let { x, y } = windowToCanvas(this.el, e.x, e.y);
-        let line = this.findLineByPoint(x, y);
-        if (this.currentLine === line) {
-          return false;
-        }
-        let cursor = this.findCursorByLine(line);
-        if (cursor) {
-          this.cursor.move(cursor.left, cursor.bottom);
-          this.currentLine = line;
+        if (this.isPointInEditor(x, y)) {
           this.focus = true;
+          this.calculateNextWord(x, y);
+          this.drawCursor();
         }
-        return true;
       },
       false,
     );
@@ -159,23 +207,14 @@ class EditorCanvas extends Canvas {
 
   /* 绑定输入事件 */
   bindInputEvent() {
-    this.container.addEventListener('keyup', (e) => {
+    window.addEventListener('keyup', (e) => {
       let { key } = e;
       let { ctx, focus, editorAreaWidth, letterSpace } = this;
       if (!focus) {
         return false;
       }
-      let wordWidth = ctx.measureText(key).width;
-      while (this.measureLineText(this.currentLine) + wordWidth + letterSpace > editorAreaWidth) {
-        this.currentLine += 1;
-        if (this.currentLine >= this.lines.length) {
-          return false;
-        }
-      }
-      let nextWord = this.findNextWord();
-      this.cursor.move(nextWord.left + wordWidth + 2, nextWord.bottom);
-      ctx.fillText(key, nextWord.left, nextWord.bottom);
-      this.lines[this.currentLine].words.push(key);
+      this.addWord(key);
+      this.draw();
       return true;
     });
   }
@@ -217,10 +256,26 @@ class EditorCanvas extends Canvas {
   /* 绘制文字 */
   drawWords() {
     let { ctx, lines, letterSpace } = this;
-    for (let { left, bottom, height, words, width } of lines) {
-      for (let word of words) {
-        console.log(word);
+    let lineTextWidth;
+    for (let i = 0, j = lines.length; i < j; i++) {
+      let { words, left, bottom } = lines[i];
+      for (let m = 0, n = words.length; m < n; m++) {
+        lineTextWidth = this.measureLineText(i, m - 1);
+        if (m > 0) {
+          lineTextWidth += letterSpace;
+        }
+        ctx.fillText(words[m], left + lineTextWidth, bottom);
       }
+    }
+  }
+
+  /* 绘制光标 */
+  drawCursor() {
+    let { cursor, focus, nextWord, lines, letterSpace } = this;
+    if (focus) {
+      let { lineNum, wordIndex } = nextWord;
+      let line = lines[lineNum];
+      cursor.move(line.left + this.measureLineText(lineNum, wordIndex - 1), line.bottom);
     }
   }
 
@@ -237,12 +292,12 @@ class EditorCanvas extends Canvas {
     this.drawPaper();
     this.drawDateHeader();
     this.drawWords();
+    this.drawCursor();
   }
 
   /* 绘制 */
   render(container: HTMLElement) {
     super.render(container);
-    container.contentEditable = 'true';
     this.ctx.font = `${this.fontSize}px sans-serif`;
     this.ctx.lineWidth = 0.5;
     this.ctx.textBaseline = 'bottom';
@@ -253,7 +308,6 @@ class EditorCanvas extends Canvas {
     this.bindFocusEvent();
     this.bindInputEvent();
     this.draw();
-    console.log(this);
   }
 }
 
