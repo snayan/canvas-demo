@@ -69,8 +69,8 @@ class Cursor {
   /* 绘制光标 */
   public move(left: number, bottom: number) {
     let { ctx, width, height, timer } = this;
-    this.imgData = ctx.getImageData(0, 0, ctx.canvas.width, ctx.canvas.height);
     this.erase();
+    this.imgData = ctx.getImageData(0, 0, ctx.canvas.width, ctx.canvas.height);
     this.left = left;
     this.bottom = bottom;
     this.lastShowTime = 0;

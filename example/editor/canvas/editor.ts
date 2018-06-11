@@ -71,7 +71,7 @@ class EditorCanvas extends Canvas {
     let { ctx, lines } = this;
     let wordWidth = this.calculateWordWidth();
     let lineWidth = lines[0].width;
-    let words = Math.floor(lineWidth / (wordWidth + wordWidth / 4));
+    let words = Math.floor(lineWidth / wordWidth);
     this.letterSpace = (lineWidth - words * wordWidth) / (words - 1);
   }
 
@@ -148,15 +148,16 @@ class EditorCanvas extends Canvas {
   /* 由于中途添加了字，需重组文字 */
   reorganizeWords(lineNum: number) {
     let { lines, editorAreaWidth } = this;
-    let totalLines = lines.length;
-    let wordIndex = lines[lineNum].words.length - 1;
-    let overWord;
-    while (this.measureLineText(lineNum, wordIndex) > editorAreaWidth && lineNum < totalLines) {
-      overWord = lines[lineNum].words.splice(wordIndex, 1)[0];
-      lineNum += 1;
-      if (lineNum < totalLines) {
-        lines[lineNum].words.unshift(overWord);
-        wordIndex = lines[lineNum].words.length - 1;
+    let overWords;
+    for (let m = lineNum, n = lines.length; m < n; m++) {
+      for (let i = 0, j = lines[m].words.length; i < j; i++) {
+        if (this.measureLineText(m, i) > editorAreaWidth) {
+          overWords = lines[m].words.slice(i);
+          lines[m].words = lines[m].words.slice(0, i);
+          if (m < n - 1) {
+            lines[m + 1].words = [...overWords, ...lines[m + 1].words];
+          }
+        }
       }
     }
   }
@@ -185,8 +186,19 @@ class EditorCanvas extends Canvas {
   }
 
   /* 删除文字 */
-  removeWord(currentWord: WordPoint) {
-    console.log(currentWord);
+  removeWord() {
+    let { nextWord, lines } = this;
+    let { lineNum, wordIndex } = nextWord;
+    if (wordIndex === 0) {
+      if (lineNum !== 0 && lines[lineNum - 1].words.length) {
+        lineNum = lineNum - 1;
+        wordIndex = lines[lineNum].words.length - 1;
+      }
+    } else {
+      wordIndex = wordIndex - 1;
+    }
+    lines[lineNum].words.splice(wordIndex, 1);
+    this.nextWord = { lineNum, wordIndex };
   }
 
   /* 绑定聚焦事件 */
@@ -213,7 +225,12 @@ class EditorCanvas extends Canvas {
       if (!focus) {
         return false;
       }
-      this.addWord(key);
+      if (e.keyCode === 8) {
+        //delete key
+        this.removeWord();
+      } else {
+        this.addWord(key);
+      }
       this.draw();
       return true;
     });
@@ -291,8 +308,8 @@ class EditorCanvas extends Canvas {
     this.erase();
     this.drawPaper();
     this.drawDateHeader();
-    this.drawWords();
     this.drawCursor();
+    this.drawWords();
   }
 
   /* 绘制 */
