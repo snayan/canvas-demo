@@ -201,6 +201,17 @@ class EditorCanvas extends Canvas {
     this.nextWord = { lineNum, wordIndex };
   }
 
+  /* 换行 */
+  changeLine() {
+    let { nextWord, lines } = this;
+    let { lineNum, wordIndex } = nextWord;
+    if (lineNum < lines.length - 1) {
+      lineNum += 1;
+    }
+    this.nextWord = { lineNum, wordIndex };
+    this.drawCursor();
+  }
+
   /* 绑定聚焦事件 */
   bindFocusEvent() {
     this.container.addEventListener(
@@ -220,14 +231,17 @@ class EditorCanvas extends Canvas {
   /* 绑定输入事件 */
   bindInputEvent() {
     window.addEventListener('keyup', (e) => {
-      let { key } = e;
+      let { key, keyCode } = e;
       let { ctx, focus, editorAreaWidth, letterSpace } = this;
       if (!focus) {
         return false;
       }
-      if (e.keyCode === 8) {
+      if (keyCode === 8) {
         //delete key
         this.removeWord();
+      } else if (keyCode === 13) {
+        //enter
+        this.changeLine();
       } else {
         this.addWord(key);
       }
