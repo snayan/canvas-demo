@@ -1,3 +1,5 @@
+import storage from 'common/storage';
+
 /* translate query to object */
 export function getQuery() {
   let search = window.location.search;
@@ -56,3 +58,22 @@ export function throttle(fn, delay) {
   };
 }
 
+/* 是否支持passive */
+export const isSupportPassive = (function() {
+  const IS_SUPPORT_PASSIVE = 'IS_SUPPORT_PASSIVE';
+  let isSupportPassive = storage.get(IS_SUPPORT_PASSIVE);
+  if (isSupportPassive != null) {
+    return isSupportPassive;
+  }
+  try {
+    let opts = Object.defineProperty({}, 'passive', {
+      get: function() {
+        isSupportPassive = true;
+      },
+    });
+    window.addEventListener('testPassive', null, opts);
+    window.removeEventListener('testPassive', null, opts);
+  } catch (e) {}
+  storage.set(IS_SUPPORT_PASSIVE, isSupportPassive);
+  return isSupportPassive;
+})();
