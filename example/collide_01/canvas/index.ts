@@ -21,8 +21,8 @@ export default class CollideCanvas extends Canvas {
   collideColor: string;
   constructor() {
     super();
-    this.rects = Array(2);
-    this.circles = Array(2);
+    this.rects = [];
+    this.circles = [];
     this.ctx = this.getContext('2d');
     this.isCollide = false;
     this.collideColor = 'rgba(244, 85, 65, 0.8)';
@@ -33,8 +33,8 @@ export default class CollideCanvas extends Canvas {
   private createRect() {
     let { width, height, rects } = this;
     let colors = ['rgba(66, 134, 244, 0.5)', 'rgba(65, 244, 223, 0.5)'];
-    for (let i = 0, j = rects.length; i < j; i++) {
-      let rectLength = Math.min(width, height) / 10;
+    let createRectSprite = (i) => {
+      let rectLength = Math.min(Math.min(width, height) / 5, 100);
       rectLength += (rectLength / 4) * i;
       let x = Math.floor(random(0, width));
       let y = Math.floor(random(0, height));
@@ -44,7 +44,7 @@ export default class CollideCanvas extends Canvas {
       if (y + rectLength > height) {
         y = y - rectLength;
       }
-      rects[i] = new RectSprite({
+      return new RectSprite({
         name: `rect_${i}`,
         left: x,
         top: y,
@@ -53,6 +53,15 @@ export default class CollideCanvas extends Canvas {
         fillStyle: colors[i % 2],
         visible: true,
       });
+    };
+    const count = 2;
+    for (let i = 0, j = count; i < j; i++) {
+      do {
+        this.draggingSprite = createRectSprite(i);
+        this.didCollide();
+      } while (this.isCollide);
+      rects[i] = this.draggingSprite as RectSprite;
+      this.draggingSprite = null;
     }
   }
 
@@ -60,8 +69,8 @@ export default class CollideCanvas extends Canvas {
   private createCircle() {
     let { width, height, circles } = this;
     let colors = ['rgba(244, 235, 65, 0.5)', 'rgba(66, 244, 86,0.5)'];
-    let radius = (Math.min(width, height) / 20) * 1.2;
-    for (let i = 0, j = circles.length; i < j; i++) {
+    let radius = Math.min(Math.min(width, height) / 10, 50);
+    let createCircleSprite = (i) => {
       let x = Math.floor(random(radius, width));
       let y = Math.floor(random(radius, height));
       if (x + radius > width) {
@@ -70,7 +79,16 @@ export default class CollideCanvas extends Canvas {
       if (y + radius > height) {
         y = y - radius;
       }
-      circles[i] = new CircleSprite({ name: `circle_${i}`, x, y, radius, fillStyle: colors[i % 2], visible: true });
+      return new CircleSprite({ name: `circle_${i}`, x, y, radius, fillStyle: colors[i % 2], visible: true });
+    };
+    const count = 2;
+    for (let i = 0, j = count; i < j; i++) {
+      do {
+        this.draggingSprite = createCircleSprite(i);
+        this.didCollide();
+      } while (this.isCollide);
+      circles[i] = this.draggingSprite as CircleSprite;
+      this.draggingSprite = null;
     }
   }
 
@@ -234,19 +252,21 @@ export default class CollideCanvas extends Canvas {
   private didCollide() {
     let { rects, circles, draggingSprite, collide } = this;
     this.isCollide = false;
-    for (let rect of rects) {
-      if (collide.isCandidateForCollide(draggingSprite, rect)) {
-        if (collide.didCollide(draggingSprite, rect)) {
-          this.isCollide = true;
-          console.log(`occur collide: ${draggingSprite.name} and ${rect.name}`);
+    if (draggingSprite) {
+      for (let rect of rects) {
+        if (collide.isCandidateForCollide(draggingSprite, rect)) {
+          if (collide.didCollide(draggingSprite, rect)) {
+            this.isCollide = true;
+            console.log(`occur collide: ${draggingSprite.name} and ${rect.name}`);
+          }
         }
       }
-    }
-    for (let circle of circles) {
-      if (collide.isCandidateForCollide(draggingSprite, circle)) {
-        if (collide.didCollide(draggingSprite, circle)) {
-          this.isCollide = true;
-          console.log(`occur collide: ${draggingSprite.name} and ${circle.name}`);
+      for (let circle of circles) {
+        if (collide.isCandidateForCollide(draggingSprite, circle)) {
+          if (collide.didCollide(draggingSprite, circle)) {
+            this.isCollide = true;
+            console.log(`occur collide: ${draggingSprite.name} and ${circle.name}`);
+          }
         }
       }
     }
