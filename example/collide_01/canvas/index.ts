@@ -2,6 +2,7 @@ import Canvas from 'common/canvas';
 import { random } from 'common/util';
 import { isSupportPassive, windowToCanvas } from 'common/util';
 import { FONT } from 'common/CONSTANT';
+import browser from 'common/browser';
 import Sprite, { RectSprite, CircleSprite } from './sprite';
 import Collide from './collide';
 
@@ -94,13 +95,13 @@ export default class CollideCanvas extends Canvas {
 
   /* 写个标题 */
   private drawTitle() {
-    let { ctx, width, height } = this;
+    let { ctx, width, height, isCollide, collideColor } = this;
     ctx.save();
     ctx.font = FONT;
     ctx.textAlign = 'center';
-    ctx.fillStyle = 'rgba(66, 134, 244, 0.8)';
+    ctx.fillStyle = isCollide ? collideColor : 'rgba(66, 134, 244, 0.8)';
     let h = ctx.measureText('M').width;
-    ctx.fillText('碰撞检测：外接图形法', width / 2, h + h / 6 + 10);
+    ctx.fillText(isCollide ? '碰撞了' : '碰撞检测：外接图形法', width / 2, h + h / 6 + 10);
     ctx.restore();
   }
 
@@ -158,7 +159,7 @@ export default class CollideCanvas extends Canvas {
     if (isCollide) {
       ctx.save();
       ctx.strokeStyle = collideColor;
-      ctx.lineWidth = 20;
+      ctx.lineWidth = 10;
       ctx.strokeRect(0, 0, width, height);
       ctx.restore();
     }
@@ -167,17 +168,36 @@ export default class CollideCanvas extends Canvas {
   /* 监听事件 */
   private bindEvent() {
     let { width, height, el } = this;
-    el.addEventListener('mousedown', this.mouseDown.bind(this), false);
-    el.addEventListener('mousemove', this.mouseMove.bind(this), false);
-    el.addEventListener('mouseup', this.mouseUp.bind(this), false);
-    el.addEventListener('mouseleave', this.mouseUp.bind(this), false);
-    //鼠标按下
+    let transPoint = (e: MouseEvent | TouchEvent) => {
+      let ex;
+      let ey;
+      if (browser.pc) {
+        ex = (e as MouseEvent).x;
+        ey = (e as MouseEvent).y;
+      } else {
+        ex = (e as TouchEvent).touches[0].pageX;
+        ey = (e as TouchEvent).touches[0].pageY;
+      }
+      return { ex, ey };
+    };
+    let bindListener = (fn) => (e) => fn.call(this, transPoint(e));
+    if (browser.pc) {
+      el.addEventListener('mousedown', bindListener(this.mouseDown), false);
+      el.addEventListener('mousemove', bindListener(this.mouseMove), false);
+      el.addEventListener('mouseup', this.mouseUp.bind(this), false);
+      el.addEventListener('mouseleave', this.mouseUp.bind(this), false);
+    } else {
+      el.addEventListener('touchstart', bindListener(this.mouseDown), isSupportPassive ? { passive: true } : false);
+      el.addEventListener('touchmove', bindListener(this.mouseMove), isSupportPassive ? { passive: true } : false);
+      el.addEventListener('touchend', this.mouseUp.bind(this), isSupportPassive ? { passive: true } : false);
+      el.addEventListener('touchcancel', this.mouseUp.bind(this), isSupportPassive ? { passive: true } : false);
+    }
   }
 
   /* 鼠标按下 */
-  private mouseDown(e: MouseEvent) {
+  private mouseDown({ ex, ey }) {
     let { el, ctx, rects, circles } = this;
-    let { x, y } = windowToCanvas(el, e.x, e.y);
+    let { x, y } = windowToCanvas(el, ex, ey);
     for (let [index, { left, top, width, height, visible }] of rects.entries()) {
       if (visible) {
         ctx.beginPath();
@@ -205,9 +225,9 @@ export default class CollideCanvas extends Canvas {
   }
 
   /* 鼠标移动 */
-  private mouseMove(e: MouseEvent) {
+  private mouseMove({ ex, ey }) {
     let { el, ctx, collide, rects, draggingSprite, width, height, lastMovePoint } = this;
-    let { x, y } = windowToCanvas(el, e.x, e.y);
+    let { x, y } = windowToCanvas(el, ex, ey);
     if (draggingSprite) {
       if (draggingSprite.type === 'rect') {
         this.moveRect(draggingSprite as RectSprite, x, y);
