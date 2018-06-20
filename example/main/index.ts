@@ -5,6 +5,7 @@ import Cutout from '../cutout';
 import Shape from '../shape';
 import Editor from '../editor';
 import Zoom from '../zoom';
+import Collide01 from '../collide_01';
 
 new Shape().render();
 new Clock().render();
@@ -13,3 +14,4 @@ new Axes().render();
 new Cutout().render();
 new Editor().render();
 new Zoom().render();
+new Collide01().render();
