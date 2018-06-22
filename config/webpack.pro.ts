@@ -14,8 +14,8 @@ const config: webpack.Configuration = {
   devtool: false,
   output: {
     path: resolveByRootDir(DIST),
-    filename: '[name].[hash].js',
-    publicPath: '/' + DIST + '/',
+    filename: '[name].[chunkhash].js',
+    publicPath: './' + DIST + '/',
   },
   optimization: {
     runtimeChunk: 'single',
