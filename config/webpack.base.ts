@@ -1,20 +1,10 @@
 import webpack from 'webpack';
-import { resolveByRootDir, exampleEntry, DIST } from '../script/util';
+import { resolveByRootDir, DIST } from '../script/util';
 
 let isProduction = process.env.NODE_ENV === 'production';
 
-let { entry, variable } = exampleEntry();
-let mainEntry = { ...entry };
-let indexEntry = `index.${Date.now()}`;
-mainEntry[indexEntry] = resolveByRootDir('index.ts');
-
 const config: webpack.Configuration = {
-  entry: mainEntry,
-  output: {
-    path: resolveByRootDir(DIST),
-    filename: '[name].js',
-    publicPath: '/',
-  },
+  entry: resolveByRootDir('index.ts'),
   resolve: {
     extensions: ['.ts', '.js'],
     modules: [resolveByRootDir('example'), resolveByRootDir('common'), 'node_modules'],
@@ -66,16 +56,7 @@ const config: webpack.Configuration = {
     errors: true,
     warnings: true,
   },
-  plugins: [
-    new webpack.EnvironmentPlugin(['NODE_ENV']),
-    new webpack.DefinePlugin({
-      'process.env.ExampleModules': JSON.stringify(variable),
-    }),
-    new webpack.HashedModuleIdsPlugin(),
-    new webpack.WatchIgnorePlugin([/scss\.d\.ts/]),
-  ],
+  plugins: [new webpack.EnvironmentPlugin(['NODE_ENV'])],
 };
-
-export { indexEntry };
 
 export default config;

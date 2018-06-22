@@ -9,15 +9,32 @@ function fail() {
   console.log('load module fail');
 }
 
-function main() {
+async function main() {
   let query = getQuery();
   let example = query.module || 'main';
-  let script = document.createElement('script');
-  script.onload = success;
-  script.onerror = fail;
-  script.src = process.env.ExampleModules[example];
-  document.body.appendChild(script);
+  if (example === 'main') {
+    await import(/* webpackPreload: true */ './example/main');
+  } else {
+    await import(`./example/${example}`);
+  }
+}
+
+/* register pwa */
+function registerPWA() {
+  if (process.env.NODE_ENV === 'production' && 'serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker
+        .register('/sw.js')
+        .then((registration) => {
+          console.log('SW registered: ', registration);
+        })
+        .catch((registrationError) => {
+          console.log('SW registration failed: ', registrationError);
+        });
+    });
+  }
 }
 
 /* 主函数 */
 main();
+registerPWA();

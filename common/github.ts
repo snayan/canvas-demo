@@ -16,11 +16,6 @@ export interface GitHubApiResult {
   encoding?: string;
 }
 
-interface StorageValue {
-  build: string;
-  content: GitHubApiResult[];
-}
-
 class Github {
   moduleName: string;
   sourcePath: string;
@@ -39,11 +34,9 @@ class Github {
     }
     let files: GitHubApiResult[];
     let contents: GitHubApiResult[] = [];
-    let storages: StorageValue = storage.get(this.moduleName);
-    if (storages && storages.build && storages.content) {
-      if (storages.build === process.env.ExampleModules[this.moduleName]) {
-        return storages.content;
-      }
+    let content: GitHubApiResult[] = storage.get(this.moduleName);
+    if (content && content.length) {
+      return content;
     }
 
     let res = await this.fetch(this.sourcePath);
@@ -64,7 +57,7 @@ class Github {
         res.ok && contents.push(await res.json());
       }
     }
-    storage.set(this.moduleName, { build: process.env.ExampleModules[this.moduleName], content: contents });
+    storage.set(this.moduleName, contents);
     return contents;
   }
 }

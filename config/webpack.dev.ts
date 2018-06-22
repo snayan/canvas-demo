@@ -3,15 +3,16 @@ process.env.NODE_ENV = 'development';
 import webpack from 'webpack';
 import merge from 'webpack-merge';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
-import HtmlWebpackAssertPlugin from '../plugins/html-webpack-assert-plugin';
-import baseConfig, { indexEntry } from './webpack.base';
+import baseConfig from './webpack.base';
+import { resolveByRootDir, DIST } from '../script/util';
 
 const config: webpack.Configuration = {
   mode: 'development',
   devtool: 'inline-source-map',
-  optimization: {
-    splitChunks: false,
-    minimize: false,
+  output: {
+    path: resolveByRootDir(DIST),
+    filename: '[name].[hash].js',
+    publicPath: '/',
   },
   module: {
     rules: [
@@ -55,13 +56,13 @@ const config: webpack.Configuration = {
     ],
   },
   plugins: [
-    new webpack.HotModuleReplacementPlugin(),
-    new webpack.NamedModulesPlugin(),
-    new HtmlWebpackAssertPlugin({
-      chunks: [indexEntry],
-      title: 'canvas demo',
-      dev: true,
+    new HtmlWebpackPlugin({
+      template: 'template.html',
+      filename: 'index.html',
     }),
+    new webpack.NamedModulesPlugin(),
+    new webpack.HotModuleReplacementPlugin(),
+    new webpack.WatchIgnorePlugin([/scss\.d\.ts/]),
   ],
 };
 

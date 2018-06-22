@@ -3,16 +3,39 @@ process.env.NODE_ENV = 'production';
 import webpack from 'webpack';
 import merge from 'webpack-merge';
 import CleanWebpackPlugin from 'clean-webpack-plugin';
-import HtmlWebpackAssertPlugin from '../plugins/html-webpack-assert-plugin';
+import UglifyJsPlugin from 'uglifyjs-webpack-plugin';
+import HtmlWebpackPlugin from 'html-webpack-plugin';
+import WorkboxPlugin from 'workbox-webpack-plugin';
 import { resolveByRootDir, DIST } from '../script/util';
-import baseConfig, { indexEntry } from './webpack.base';
+import baseConfig from './webpack.base';
 
 const config: webpack.Configuration = {
   mode: 'production',
-  devtool: 'source-map',
+  devtool: false,
+  output: {
+    path: resolveByRootDir(DIST),
+    filename: '[name].[hash].js',
+    publicPath: '/' + DIST + '/',
+  },
   optimization: {
-    splitChunks: {},
+    runtimeChunk: 'single',
     minimize: true,
+    minimizer: [
+      new UglifyJsPlugin({
+        sourceMap: false,
+        cache: true,
+        uglifyOptions: {
+          ecma: 6,
+          mangle: true,
+          compress: {
+            drop_debugger: true,
+          },
+        },
+      }),
+    ],
+    splitChunks: {
+      chunks: 'all',
+    },
   },
   module: {
     rules: [
@@ -41,10 +64,16 @@ const config: webpack.Configuration = {
   },
   plugins: [
     new CleanWebpackPlugin([DIST], { root: resolveByRootDir() }),
-    new HtmlWebpackAssertPlugin({
-      title: 'canvas demo',
-      chunks: [indexEntry],
-      dev: false,
+    new HtmlWebpackPlugin({
+      template: 'template.html',
+      filename: '../index.html',
+    }),
+    new webpack.HashedModuleIdsPlugin(),
+    new WorkboxPlugin.GenerateSW({
+      // these options encourage the ServiceWorkers to get in there fast
+      // and not allow any straggling "old" SWs to hang around
+      clientsClaim: true,
+      skipWaiting: true,
     }),
   ],
 };

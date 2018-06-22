@@ -12,7 +12,11 @@
     "type": "git",
     "url": "git+https://github.com/snayan/canvas-demo.git"
   },
-  "keywords": ["canvas", "game", "h5"],
+  "keywords": [
+    "canvas",
+    "game",
+    "h5"
+  ],
   "author": "snayan",
   "license": "MIT",
   "bugs": {
@@ -31,7 +35,9 @@
     "clean-webpack-plugin": "^0.1.19",
     "css-loader": "^0.28.11",
     "file-loader": "^1.1.11",
+    "html-webpack-inline-source-plugin": "^0.0.10",
     "html-webpack-plugin": "^3.2.0",
+    "inline-chunk-manifest-html-webpack-plugin": "^2.0.0",
     "js-base64": "^2.4.3",
     "mini-css-extract-plugin": "^0.4.0",
     "node-sass": "^4.9.0",
@@ -52,9 +58,14 @@
     "tsconfig-paths": "^3.3.1",
     "typescript": "^2.8.3",
     "typings-for-css-modules-loader": "^1.7.0",
+    "uglifyjs-webpack-plugin": "^1.2.6",
     "webpack": "^4.6.0",
     "webpack-dev-server": "^3.1.4",
-    "webpack-merge": "^4.1.2"
+    "webpack-merge": "^4.1.2",
+    "workbox-webpack-plugin": "^3.3.0"
   },
-  "sideEffects": ["*.css","*.scss"]
+  "sideEffects": [
+    "*.css",
+    "*.scss"
+  ]
 }
