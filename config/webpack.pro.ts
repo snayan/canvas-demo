@@ -76,6 +76,7 @@ const config: webpack.Configuration = {
       skipWaiting: true,
       importWorkboxFrom: 'local',
       importsDirectory: 'workbox',
+      exclude: [/\.htm$/, /\.html$/],
     }),
   ],
 };
