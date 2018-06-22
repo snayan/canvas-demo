@@ -11,10 +11,11 @@
  * See https://goo.gl/2aRDsh
  */
 
-importScripts("https://storage.googleapis.com/workbox-cdn/releases/3.3.0/workbox-sw.js");
+importScripts("/canvas-demo/dist/workbox/workbox-v3.3.0/workbox-sw.js");
+workbox.setConfig({modulePathPrefix: "/canvas-demo/dist/workbox/workbox-v3.3.0"});
 
 importScripts(
-  "./dist/precache-manifest.c955c2a984461f033fec084137f401c5.js"
+  "/canvas-demo/dist/workbox/precache-manifest.d934b65ebf953d7519e03666cc70b658.js"
 );
 
 workbox.skipWaiting();

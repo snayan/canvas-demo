@@ -15,7 +15,7 @@ const config: webpack.Configuration = {
   output: {
     path: resolveByRootDir(DIST),
     filename: '[name].[chunkhash].js',
-    publicPath: './' + DIST + '/',
+    publicPath: '/canvas-demo/' + DIST + '/',
   },
   optimization: {
     runtimeChunk: 'single',
@@ -74,6 +74,8 @@ const config: webpack.Configuration = {
       // and not allow any straggling "old" SWs to hang around
       clientsClaim: true,
       skipWaiting: true,
+      importWorkboxFrom: 'local',
+      importsDirectory: 'workbox',
     }),
   ],
 };

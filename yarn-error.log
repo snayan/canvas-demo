@@ -77,7 +77,8 @@ npm manifest:
       "uglifyjs-webpack-plugin": "^1.2.6",
       "webpack": "^4.6.0",
       "webpack-dev-server": "^3.1.4",
-      "webpack-merge": "^4.1.2"
+      "webpack-merge": "^4.1.2",
+      "workbox-webpack-plugin": "^3.3.0"
     },
     "sideEffects": [
       "*.css",
@@ -599,7 +600,7 @@ Lockfile:
       esutils "^2.0.2"
       js-tokens "^3.0.2"
   
-  babel-runtime@^6.23.0:
+  babel-runtime@^6.23.0, babel-runtime@^6.26.0:
     version "6.26.0"
     resolved "https://registry.yarnpkg.com/babel-runtime/-/babel-runtime-6.26.0.tgz#965c7058668e82b55d7bfe04ff2337bc8b5647fe"
     dependencies:
@@ -1220,6 +1221,10 @@ Lockfile:
   commander@~2.13.0:
     version "2.13.0"
     resolved "https://registry.yarnpkg.com/commander/-/commander-2.13.0.tgz#6964bca67685df7c1f1430c584f07d7597885b9c"
+  
+  common-tags@^1.4.0:
+    version "1.8.0"
+    resolved "https://npm.garenanow.com/common-tags/-/common-tags-1.8.0.tgz#8e3153e542d4a39e9b10554434afaaf98956a937"
   
   commondir@^1.0.1:
     version "1.0.1"
@@ -2276,6 +2281,14 @@ Lockfile:
       inherits "^2.0.1"
       readable-stream "^2.0.0"
   
+  fs-extra@^4.0.2:
+    version "4.0.3"
+    resolved "https://npm.garenanow.com/fs-extra/-/fs-extra-4.0.3.tgz#0d852122e5bc5beb453fb028e9c0c9bf36340c94"
+    dependencies:
+      graceful-fs "^4.1.2"
+      jsonfile "^4.0.0"
+      universalify "^0.1.0"
+  
   fs-minipass@^1.2.5:
     version "1.2.5"
     resolved "https://registry.yarnpkg.com/fs-minipass/-/fs-minipass-1.2.5.tgz#06c277218454ec288df77ada54a03b8702aacb9d"
@@ -2480,7 +2493,7 @@ Lockfile:
     version "4.1.4"
     resolved "https://registry.yarnpkg.com/graceful-fs/-/graceful-fs-4.1.4.tgz#ef089d2880f033b011823ce5c8fae798da775dbd"
   
-  graceful-fs@^4.1.11, graceful-fs@^4.1.2:
+  graceful-fs@^4.1.11, graceful-fs@^4.1.2, graceful-fs@^4.1.6:
     version "4.1.11"
     resolved "https://registry.yarnpkg.com/graceful-fs/-/graceful-fs-4.1.11.tgz#0e8bdfe4d1ddb8854d64e04ea7c00e2a026e5658"
   
@@ -3182,6 +3195,12 @@ Lockfile:
     version "1.0.0"
     resolved "https://registry.yarnpkg.com/isarray/-/isarray-1.0.0.tgz#bb935d48582cba168c06834957a54a3e07124f11"
   
+  isemail@3.x.x:
+    version "3.1.2"
+    resolved "https://npm.garenanow.com/isemail/-/isemail-3.1.2.tgz#937cf919002077999a73ea8b1951d590e84e01dd"
+    dependencies:
+      punycode "2.x.x"
+  
   isexe@^2.0.0:
     version "2.0.0"
     resolved "https://registry.yarnpkg.com/isexe/-/isexe-2.0.0.tgz#e8fbf374dc556ff8947a10dcb0572d633f2cfa10"
@@ -3203,6 +3222,14 @@ Lockfile:
   isstream@~0.1.2:
     version "0.1.2"
     resolved "https://registry.yarnpkg.com/isstream/-/isstream-0.1.2.tgz#47e63f7af55afa6f92e1500e690eb8b8529c099a"
+  
+  joi@^11.1.1:
+    version "11.4.0"
+    resolved "https://npm.garenanow.com/joi/-/joi-11.4.0.tgz#f674897537b625e9ac3d0b7e1604c828ad913ccb"
+    dependencies:
+      hoek "4.x.x"
+      isemail "3.x.x"
+      topo "2.x.x"
   
   js-base64@^2.1.8, js-base64@^2.1.9, js-base64@^2.4.3:
     version "2.4.3"
@@ -3250,6 +3277,12 @@ Lockfile:
     version "0.2.3"
     resolved "https://registry.yarnpkg.com/json-schema/-/json-schema-0.2.3.tgz#b480c892e59a2f05954ce727bd3f2a4e882f9e13"
   
+  json-stable-stringify@^1.0.1:
+    version "1.0.1"
+    resolved "https://npm.garenanow.com/json-stable-stringify/-/json-stable-stringify-1.0.1.tgz#9a759d39c5f2ff503fd5300646ed445f88c4f9af"
+    dependencies:
+      jsonify "~0.0.0"
+  
   json-stringify-safe@~5.0.1:
     version "5.0.1"
     resolved "https://registry.yarnpkg.com/json-stringify-safe/-/json-stringify-safe-5.0.1.tgz#1296a2d58fd45f19a0f6ce01d65701e2c735b6eb"
@@ -3261,6 +3294,16 @@ Lockfile:
   json5@^0.5.0:
     version "0.5.1"
     resolved "https://registry.yarnpkg.com/json5/-/json5-0.5.1.tgz#1eade7acc012034ad84e2396767ead9fa5495821"
+  
+  jsonfile@^4.0.0:
+    version "4.0.0"
+    resolved "https://npm.garenanow.com/jsonfile/-/jsonfile-4.0.0.tgz#8771aae0799b64076b76640fca058f9c10e33ecb"
+    optionalDependencies:
+      graceful-fs "^4.1.6"
+  
+  jsonify@~0.0.0:
+    version "0.0.0"
+    resolved "https://npm.garenanow.com/jsonify/-/jsonify-0.0.0.tgz#2c74b6ee41d93ca51b7b5aaee8f503631d252a73"
   
   jsonpointer@^4.0.0:
     version "4.0.1"
@@ -3393,7 +3436,7 @@ Lockfile:
     version "4.1.1"
     resolved "https://registry.yarnpkg.com/lodash.tail/-/lodash.tail-4.1.1.tgz#d2333a36d9e7717c8ad2f7cacafec7c32b444664"
   
-  lodash.template@^4.2.4:
+  lodash.template@^4.2.4, lodash.template@^4.4.0:
     version "4.4.0"
     resolved "https://registry.yarnpkg.com/lodash.template/-/lodash.template-4.4.0.tgz#e73a0385c8355591746e020b99679c690e68fba0"
     dependencies:
@@ -4914,6 +4957,10 @@ Lockfile:
     version "0.2.0"
     resolved "https://registry.yarnpkg.com/preserve/-/preserve-0.2.0.tgz#815ed1f6ebc65926f865b310c0713bcb3315ce4b"
   
+  pretty-bytes@^4.0.2:
+    version "4.0.2"
+    resolved "https://npm.garenanow.com/pretty-bytes/-/pretty-bytes-4.0.2.tgz#b2bf82e7350d65c6c33aa95aaa5a4f6327f61cd9"
+  
   pretty-error@^2.0.2:
     version "2.1.1"
     resolved "https://registry.yarnpkg.com/pretty-error/-/pretty-error-2.1.1.tgz#5f4f87c8f91e5ae3f3ba87ab4cf5e03b1a17f1a3"
@@ -4982,6 +5029,10 @@ Lockfile:
   punycode@1.3.2:
     version "1.3.2"
     resolved "https://registry.yarnpkg.com/punycode/-/punycode-1.3.2.tgz#9653a036fb7c1ee42342f2325cceefea3926c48d"
+  
+  punycode@2.x.x:
+    version "2.1.1"
+    resolved "https://npm.garenanow.com/punycode/-/punycode-2.1.1.tgz#b58b010ac40c22c5657616c8d2c2c02c7bf479ec"
   
   punycode@^1.2.4, punycode@^1.4.1:
     version "1.4.1"
@@ -6144,6 +6195,12 @@ Lockfile:
       regex-not "^1.0.2"
       safe-regex "^1.1.0"
   
+  topo@2.x.x:
+    version "2.0.2"
+    resolved "https://npm.garenanow.com/topo/-/topo-2.0.2.tgz#cd5615752539057c0dc0491a621c3bc6fbe1d182"
+    dependencies:
+      hoek "4.x.x"
+  
   toposort@^1.0.0:
     version "1.0.7"
     resolved "https://registry.yarnpkg.com/toposort/-/toposort-1.0.7.tgz#2e68442d9f64ec720b8cc89e6443ac6caa950029"
@@ -6388,6 +6445,10 @@ Lockfile:
     dependencies:
       isnumeric "^0.2.0"
       viewport-dimensions "^0.2.0"
+  
+  universalify@^0.1.0:
+    version "0.1.2"
+    resolved "https://npm.garenanow.com/universalify/-/universalify-0.1.2.tgz#b646f69be3942dabcecc9d6639c80dc105efaa66"
   
   unpipe@1.0.0, unpipe@~1.0.0:
     version "1.0.0"
@@ -6685,6 +6746,108 @@ Lockfile:
     resolved "https://registry.yarnpkg.com/wide-align/-/wide-align-1.1.2.tgz#571e0f1b0604636ebc0dfc21b0339bbe31341710"
     dependencies:
       string-width "^1.0.2"
+  
+  workbox-background-sync@^3.3.0:
+    version "3.3.0"
+    resolved "https://npm.garenanow.com/workbox-background-sync/-/workbox-background-sync-3.3.0.tgz#87e212715391d2002274f526e77851cfab86ed8a"
+    dependencies:
+      workbox-core "^3.3.0"
+  
+  workbox-broadcast-cache-update@^3.3.0:
+    version "3.3.0"
+    resolved "https://npm.garenanow.com/workbox-broadcast-cache-update/-/workbox-broadcast-cache-update-3.3.0.tgz#ce4fa56656de5024f567c06f6614e36961c30c0f"
+    dependencies:
+      workbox-core "^3.3.0"
+  
+  workbox-build@^3.3.0:
+    version "3.3.0"
+    resolved "https://npm.garenanow.com/workbox-build/-/workbox-build-3.3.0.tgz#7f3fa9de9714dab318122933b9615a38d94d643d"
+    dependencies:
+      babel-runtime "^6.26.0"
+      common-tags "^1.4.0"
+      fs-extra "^4.0.2"
+      glob "^7.1.2"
+      joi "^11.1.1"
+      lodash.template "^4.4.0"
+      pretty-bytes "^4.0.2"
+      workbox-background-sync "^3.3.0"
+      workbox-broadcast-cache-update "^3.3.0"
+      workbox-cache-expiration "^3.3.0"
+      workbox-cacheable-response "^3.3.0"
+      workbox-core "^3.3.0"
+      workbox-google-analytics "^3.3.0"
+      workbox-precaching "^3.3.0"
+      workbox-range-requests "^3.3.0"
+      workbox-routing "^3.3.0"
+      workbox-strategies "^3.3.0"
+      workbox-streams "^3.3.0"
+      workbox-sw "^3.3.0"
+  
+  workbox-cache-expiration@^3.3.0:
+    version "3.3.0"
+    resolved "https://npm.garenanow.com/workbox-cache-expiration/-/workbox-cache-expiration-3.3.0.tgz#fe9cfde8e8168fa25ff778c6e2eda54181f58506"
+    dependencies:
+      workbox-core "^3.3.0"
+  
+  workbox-cacheable-response@^3.3.0:
+    version "3.3.0"
+    resolved "https://npm.garenanow.com/workbox-cacheable-response/-/workbox-cacheable-response-3.3.0.tgz#b7d3904fa30baf7da271d73dd2f0da7518378acf"
+    dependencies:
+      workbox-core "^3.3.0"
+  
+  workbox-core@^3.3.0:
+    version "3.3.0"
+    resolved "https://npm.garenanow.com/workbox-core/-/workbox-core-3.3.0.tgz#3606223514a85a0935550ed15d973c12b12ff680"
+  
+  workbox-google-analytics@^3.3.0:
+    version "3.3.0"
+    resolved "https://npm.garenanow.com/workbox-google-analytics/-/workbox-google-analytics-3.3.0.tgz#380ecefc24040db9e191b2789bced19ad61c8ccb"
+    dependencies:
+      workbox-background-sync "^3.3.0"
+      workbox-core "^3.3.0"
+      workbox-routing "^3.3.0"
+      workbox-strategies "^3.3.0"
+  
+  workbox-precaching@^3.3.0:
+    version "3.3.0"
+    resolved "https://npm.garenanow.com/workbox-precaching/-/workbox-precaching-3.3.0.tgz#471bbc26bd3e92b24fd9d636842cf3f358302bd2"
+    dependencies:
+      workbox-core "^3.3.0"
+  
+  workbox-range-requests@^3.3.0:
+    version "3.3.0"
+    resolved "https://npm.garenanow.com/workbox-range-requests/-/workbox-range-requests-3.3.0.tgz#9703cb91e9ea9104ed09c545a87e25f41002ddce"
+    dependencies:
+      workbox-core "^3.3.0"
+  
+  workbox-routing@^3.3.0:
+    version "3.3.0"
+    resolved "https://npm.garenanow.com/workbox-routing/-/workbox-routing-3.3.0.tgz#8184d0159c8c4e4c9dd7a0da08e28e579e372319"
+    dependencies:
+      workbox-core "^3.3.0"
+  
+  workbox-strategies@^3.3.0:
+    version "3.3.0"
+    resolved "https://npm.garenanow.com/workbox-strategies/-/workbox-strategies-3.3.0.tgz#0681df07ebf4628454aa91317aa87de2d1ded6c6"
+    dependencies:
+      workbox-core "^3.3.0"
+  
+  workbox-streams@^3.3.0:
+    version "3.3.0"
+    resolved "https://npm.garenanow.com/workbox-streams/-/workbox-streams-3.3.0.tgz#7591e37a08bf65b32d1db076b86900a8a4b7d02c"
+    dependencies:
+      workbox-core "^3.3.0"
+  
+  workbox-sw@^3.3.0:
+    version "3.3.0"
+    resolved "https://npm.garenanow.com/workbox-sw/-/workbox-sw-3.3.0.tgz#1a9fd728951c76b86225b472f9e37088913c9bc4"
+  
+  workbox-webpack-plugin@^3.3.0:
+    version "3.3.0"
+    resolved "https://npm.garenanow.com/workbox-webpack-plugin/-/workbox-webpack-plugin-3.3.0.tgz#d0c623139dec897388f115e5b8d5209661db2841"
+    dependencies:
+      json-stable-stringify "^1.0.1"
+      workbox-build "^3.3.0"
   
   worker-farm@^1.5.2:
     version "1.6.0"
