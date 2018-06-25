@@ -128,15 +128,14 @@ class TimeSystem {
   /* 计算已经流逝的时间  */
   private calculateElapsed() {
     let { transducerStartTime, transducer, isPaused } = this;
-    if (this.isPaused) {
-      return this.elapsed;
+    if (!this.isPaused) {
+      let transducerElapsed = Date.now() - transducerStartTime;
+      if (typeof transducer === 'function') {
+        transducerElapsed = transducer(transducerElapsed);
+      }
+      this.elapsed += transducerElapsed;
+      this.transducerStartTime = Date.now();
     }
-    let transducerElapsed = Date.now() - transducerStartTime;
-    if (typeof transducer === 'function') {
-      transducerElapsed = transducer(transducerElapsed);
-    }
-    this.elapsed += transducerElapsed;
-    return this.elapsed;
   }
 
   /* 启动时间系统 */
@@ -148,8 +147,8 @@ class TimeSystem {
   /* 暂停 */
   public paused() {
     if (!this.isPaused) {
-      this.isPaused = true;
       this.calculateElapsed();
+      this.isPaused = true;
     }
   }
 
@@ -162,7 +161,15 @@ class TimeSystem {
   }
   /* 获取经过的时间 */
   public getElapsed() {
-    return this.calculateElapsed();
+    let { transducerStartTime, transducer, isPaused } = this;
+    if (this.isPaused) {
+      return this.elapsed;
+    }
+    let transducerElapsed = Date.now() - transducerStartTime;
+    if (typeof transducer === 'function') {
+      transducerElapsed = transducer(transducerElapsed);
+    }
+    return this.elapsed + transducerElapsed;
   }
 
   /* 修改时间流逝传感器 */
@@ -170,7 +177,6 @@ class TimeSystem {
     let { transducer } = this;
     this.calculateElapsed();
     this.transducer = transducerFunction;
-    this.transducerStartTime = Date.now();
     if (Number.isFinite(duration)) {
       setTimeout(this.setTransducer.bind(this, transducer), duration);
     }

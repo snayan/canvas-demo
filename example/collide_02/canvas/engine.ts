@@ -5,15 +5,17 @@ import TimeSystem from './timeSystem';
 abstract class Engine {
   public abstract name: string;
   public abstract fps: number;
-  public abstract gameTime: number;
   public abstract timeSystem: TimeSystem;
   public abstract rate: number;
 
   /* 开始游戏 */
   public abstract start(): void;
 
-  /* 暂停/恢复 */
-  public abstract togglePaused(): void;
+  /* 暂停 */
+  public abstract paused(): void;
+
+  /* 恢复 */
+  public abstract unPaused(): void;
 
   /* 播放音乐 */
   public abstract playSound(): void;
@@ -28,6 +30,16 @@ abstract class Engine {
 
   /* 销毁游戏 */
   public abstract destroy(): void;
+
+  /* 判断是否暂停 */
+  public isPaused() {
+    return this.timeSystem.isPaused;
+  }
+
+  /* 获取游戏时长 */
+  public getGameTime() {
+    return this.timeSystem.getElapsed();
+  }
 }
 
 export default Engine;
