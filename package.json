@@ -4,9 +4,9 @@
   "description": "canvas demo ",
   "main": "index.js",
   "scripts": {
-    "build": "ts-node --project tsconfig.webpack.json script/build.ts",
-    "start": "ts-node --project tsconfig.webpack.json script/start.ts",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": " ts-node --project tsconfig.webpack.json script/build.ts",
+    "start": " ts-node --project tsconfig.webpack.json script/start.ts",
+    "test": "jest"
   },
   "repository": {
     "type": "git",
@@ -67,5 +67,24 @@
   "sideEffects": [
     "*.css",
     "*.scss"
-  ]
+  ],
+  "devDependencies": {
+    "@types/jest": "^23.1.1",
+    "jest": "^23.1.0",
+    "ts-jest": "^22.4.6"
+  },
+  "jest": {
+    "transform": {
+      "^.+\\.tsx?$": "ts-jest"
+    },
+    "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js",
+      "jsx",
+      "json",
+      "node"
+    ]
+  }
 }
