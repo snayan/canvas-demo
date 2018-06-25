@@ -53,13 +53,12 @@ export class AnimationTimer extends StopWatch {
 
   /* 时间抽扭曲 */
   public getElapsedTime() {
+    if (!this.isRunning() || !this.duration) {
+      return 0;
+    }
     /* 实际流逝的时间 */
     let elapsed = super.getElapsedTime();
     let percentComplete = elapsed / this.duration;
-
-    if (!this.isRunning()) {
-      return 0;
-    }
     return elapsed * (this.transducer(percentComplete) / percentComplete);
   }
 
@@ -115,64 +114,65 @@ export class AnimationTimer extends StopWatch {
 
 /* 游戏时间系统 */
 class TimeSystem {
-  public startTime: number;
+  private transducerStartTime: number;
+  private elapsed: number;
   public isPaused: boolean;
-  public pausedStartTime: number;
   public transducer: (now: number) => number;
-  public stopWatch: StopWatch;
-  private calculateStartTime: number;
   constructor() {
-    this.startTime = 0;
+    this.elapsed = 0;
     this.isPaused = false;
-    this.pausedStartTime = 0;
-    this.calculateStartTime = 0;
-    this.stopWatch = new StopWatch();
     this.transducer = (elapsed: number) => elapsed;
+    this.transducerStartTime = 0;
+  }
+
+  /* 计算已经流逝的时间  */
+  private calculateElapsed() {
+    let { transducerStartTime, transducer, isPaused } = this;
+    if (this.isPaused) {
+      return this.elapsed;
+    }
+    let transducerElapsed = Date.now() - transducerStartTime;
+    if (typeof transducer === 'function') {
+      transducerElapsed = transducer(transducerElapsed);
+    }
+    this.elapsed += transducerElapsed;
+    return this.elapsed;
   }
 
   /* 启动时间系统 */
   public start() {
-    this.startTime = Date.now();
-    this.calculateStartTime = this.startTime;
-    this.stopWatch.start();
+    this.elapsed = 0;
+    this.transducerStartTime = Date.now();
   }
 
   /* 暂停 */
   public paused() {
     if (!this.isPaused) {
-      this.pausedStartTime = Date.now();
       this.isPaused = true;
+      this.calculateElapsed();
     }
   }
 
   /* 恢复 */
   public unPaused() {
     if (this.isPaused) {
-      let pausedElapsed = Date.now() - this.pausedStartTime;
+      this.transducerStartTime = Date.now();
       this.isPaused = false;
-      this.pausedStartTime = 0;
-      this.calculateStartTime -= pausedElapsed;
     }
   }
   /* 获取经过的时间 */
   public getElapsed() {
-    let { stopWatch, calculateStartTime, transducer } = this;
-    if (!stopWatch.isRunning()) {
-      return 0;
-    }
-    let elapsed = Date.now() - calculateStartTime;
-    if (typeof transducer === 'function') {
-      elapsed = transducer(elapsed);
-    }
-    return elapsed;
+    return this.calculateElapsed();
   }
 
   /* 修改时间流逝传感器 */
   public setTransducer(transducerFunction: (now: number) => number, duration?: number) {
     let { transducer } = this;
+    this.calculateElapsed();
     this.transducer = transducerFunction;
+    this.transducerStartTime = Date.now();
     if (Number.isFinite(duration)) {
-      setTimeout(() => (this.transducer = transducer), duration);
+      setTimeout(this.setTransducer.bind(this, transducer), duration);
     }
   }
 
