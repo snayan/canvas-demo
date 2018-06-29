@@ -2,17 +2,19 @@
 
 import Engine from './engine';
 import TimeSystem from './timeSystem';
-import { throttle } from 'common/util';
+import { Sprite } from './sprite';
 
 class Game extends Engine {
   private lastFrameTime: number;
-  private calculateFps: (now: number) => void;
   public name: string;
   public fps: number;
   public ctx: CanvasRenderingContext2D;
   public timeSystem: TimeSystem;
   public rate: number;
   public isDestroyed: boolean;
+  public width: number;
+  public height: number;
+  public sprites: Sprite[];
   constructor(name: string, ctx: CanvasRenderingContext2D) {
     super();
     this.name = name;
@@ -22,17 +24,50 @@ class Game extends Engine {
     this.rate = 1;
     this.isDestroyed = true;
     this.lastFrameTime = 0;
-    this.calculateFps = throttle((now) => {
-      let elapsed = now - this.lastFrameTime;
-      if (this.lastFrameTime && elapsed) {
-        this.fps = (this.rate * 1000) / elapsed;
+    this.width = ctx.canvas.width;
+    this.height = ctx.canvas.height;
+    this.sprites = [];
+  }
+
+  /* 计算fps */
+  private calculateFps(now: number) {
+    let elapsed = now - this.lastFrameTime;
+    if (this.lastFrameTime && elapsed) {
+      this.fps = 1000 / elapsed;
+    }
+  }
+
+  /* 擦除游戏 */
+  private erase() {
+    let { ctx, width, height } = this;
+    ctx.clearRect(0, 0, width, height);
+  }
+
+  /* 更新精灵 */
+  private updateSprites(now: number) {
+    let { lastFrameTime, fps } = this;
+    for (let sprite of this.sprites) {
+      if (sprite.isVisible) {
+        sprite.update(now, lastFrameTime, fps);
       }
-    }, 500);
+    }
+  }
+
+  /* 绘制精灵 */
+  private drawSprites() {
+    for (let sprite of this.sprites) {
+      if (sprite.isVisible) {
+        sprite.draw();
+      }
+    }
   }
 
   /* 持续的绘制游戏 */
   private animate(now: number) {
+    this.erase();
     this.calculateFps(now);
+    this.updateSprites(now);
+    this.drawSprites();
     this.lastFrameTime = now;
     window.requestAnimationFrame(this.animate.bind(this));
   }

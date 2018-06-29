@@ -6,7 +6,12 @@ enum SpriteType {
   Image,
 }
 
-class Sprite {
+export interface Behavior {
+  execute(sprite: Sprite, now: number, lastFrameTime: number, fps: number): void;
+  [attr: string]: any;
+}
+
+export abstract class Sprite {
   name: string;
   type: SpriteType;
   fillStyle: string;
@@ -19,9 +24,12 @@ class Sprite {
   ctx: CanvasRenderingContext2D;
   horizontalVelocity: number;
   verticalVelocity: number;
+  isVisible: boolean;
+  behaviors: Behavior[];
   constructor(name, ctx, option) {
     this.name = name;
     this.ctx = ctx;
+    this.isVisible = option.isVisible || true;
     this.type = option.type || SpriteType.Rect;
     this.fillStyle = option.fillStyle || this.ctx.fillStyle;
     this.lineWidth = option.lineWidth || this.ctx.lineWidth;
@@ -32,6 +40,7 @@ class Sprite {
     this.shadowColor = option.shadowColor || this.ctx.shadowColor;
     this.horizontalVelocity = option.horizontalVelocity || 0;
     this.verticalVelocity = option.verticalVelocity || 0;
+    this.behaviors = option.behaviors || [];
   }
 
   /* 应用样式 */
@@ -46,15 +55,20 @@ class Sprite {
     ctx.shadowColor = shadowColor;
   }
 
+  /* 添加行为 */
+  public addBehavior(behaviors: Behavior[] | Behavior) {
+    Array.isArray(behaviors) ? this.behaviors.concat(behaviors) : this.behaviors.push(behaviors);
+  }
+
   /* 更新 */
-  public update(callback: (sprite: Sprite) => void) {
-    callback(this);
+  public update(now: number, lastFrameTime: number, fps: number) {
+    for (let behavior of this.behaviors) {
+      behavior.execute(this, now, lastFrameTime, fps);
+    }
   }
 
   /* 绘制 */
-  public draw() {
-    throw new Error('draw method must be override');
-  }
+  public abstract draw(): void;
 }
 
 /* 圆形精灵 */

@@ -22,7 +22,7 @@ npm manifest:
     "scripts": {
       "build": " ts-node --project tsconfig.webpack.json script/build.ts",
       "start": " ts-node --project tsconfig.webpack.json script/start.ts",
-      "test": "jest"
+      "test": "jest --bail --coverage"
     },
     "repository": {
       "type": "git",
@@ -8424,7 +8424,7 @@ Trace:
   Error: Command failed.
   Exit code: 1
   Command: sh
-  Arguments: -c jest
+  Arguments: -c jest --bail --coverage
   Directory: /Users/yang.zhang/Documents/github/canvas-demo
   Output:
   

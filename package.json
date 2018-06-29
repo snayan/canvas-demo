@@ -6,7 +6,7 @@
   "scripts": {
     "build": " ts-node --project tsconfig.webpack.json script/build.ts",
     "start": " ts-node --project tsconfig.webpack.json script/start.ts",
-    "test": "jest"
+    "test": "jest --bail --coverage"
   },
   "repository": {
     "type": "git",
