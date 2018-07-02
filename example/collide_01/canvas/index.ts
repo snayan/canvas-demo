@@ -1,6 +1,6 @@
 import Canvas from 'common/canvas';
 import { random } from 'common/util';
-import { isSupportPassive, windowToCanvas } from 'common/util';
+import { windowToCanvas } from 'common/util';
 import { FONT } from 'common/CONSTANT';
 import browser from 'common/browser';
 import Sprite, { RectSprite, CircleSprite } from './sprite';
@@ -171,6 +171,7 @@ export default class CollideCanvas extends Canvas {
     let transPoint = (e: MouseEvent | TouchEvent) => {
       let ex;
       let ey;
+      e.preventDefault();
       if (browser.pc) {
         ex = (e as MouseEvent).x;
         ey = (e as MouseEvent).y;
@@ -187,10 +188,10 @@ export default class CollideCanvas extends Canvas {
       el.addEventListener('mouseup', this.mouseUp.bind(this), false);
       el.addEventListener('mouseleave', this.mouseUp.bind(this), false);
     } else {
-      el.addEventListener('touchstart', bindListener(this.mouseDown), isSupportPassive ? { passive: true } : false);
-      el.addEventListener('touchmove', bindListener(this.mouseMove), isSupportPassive ? { passive: true } : false);
-      el.addEventListener('touchend', this.mouseUp.bind(this), isSupportPassive ? { passive: true } : false);
-      el.addEventListener('touchcancel', this.mouseUp.bind(this), isSupportPassive ? { passive: true } : false);
+      el.addEventListener('touchstart', bindListener(this.mouseDown), false);
+      el.addEventListener('touchmove', bindListener(this.mouseMove), false);
+      el.addEventListener('touchend', this.mouseUp.bind(this), false);
+      el.addEventListener('touchcancel', this.mouseUp.bind(this), false);
     }
   }
 

@@ -2,7 +2,7 @@ import Canvas from 'common/canvas';
 import Grid from './grid';
 import Axes, { AxesData } from './axes';
 import browser from 'common/browser';
-import { random, windowToCanvas, throttle, isSupportPassive } from 'common/util';
+import { random, windowToCanvas, throttle } from 'common/util';
 
 class AxesCanvas extends Canvas {
   ctx: CanvasRenderingContext2D;
@@ -34,7 +34,7 @@ class AxesCanvas extends Canvas {
   /* 绑定鼠标移动事件 */
   bindMouseEvent() {
     let { el } = this;
-    el.addEventListener(browser.mobile ? 'touchmove' : 'mousemove', throttle(this.drawGuide.bind(this), 100), isSupportPassive ? { passive: true } : false);
+    el.addEventListener(browser.mobile ? 'touchmove' : 'mousemove', throttle(this.drawGuide.bind(this), 100), false);
   }
 
   /* 绘制提示线 */
@@ -42,6 +42,7 @@ class AxesCanvas extends Canvas {
     let x;
     let y;
     let { el } = this;
+    e.preventDefault();
     if (browser.pc) {
       e = e as MouseEvent;
       x = e.x;

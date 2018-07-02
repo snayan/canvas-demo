@@ -1,6 +1,6 @@
 import Canvas from 'common/canvas';
 import Loading from '@/loading';
-import { windowToCanvas, isSupportPassive } from 'common/util';
+import { windowToCanvas } from 'common/util';
 import browser from 'common/browser';
 
 interface Rect {
@@ -72,6 +72,7 @@ class ZoomCanvas extends Canvas {
   /* 绘制放大镜🔍 */
   private drawZoom(e: MouseEvent | TouchEvent) {
     let { ctx, zoomRadius, loading, width, height, image, scale, areaRect } = this;
+    e.preventDefault();
     if (!loading.isLoading) {
       let x;
       let y;
@@ -110,7 +111,7 @@ class ZoomCanvas extends Canvas {
 
   /* 绑定鼠标移动事件 */
   private bindMouseMove() {
-    this.container.addEventListener(browser.pc ? 'mousemove' : 'touchmove', this.drawZoom.bind(this), isSupportPassive ? { passive: true } : false);
+    this.container.addEventListener(browser.pc ? 'mousemove' : 'touchmove', this.drawZoom.bind(this), false);
   }
 
   /* 渲染 */
