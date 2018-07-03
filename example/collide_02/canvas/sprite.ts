@@ -11,6 +11,11 @@ export interface Behavior {
   [attr: string]: any;
 }
 
+export interface Artist {
+  draw(sprite: Sprite): void;
+  [attr: string]: any;
+}
+
 export abstract class Sprite {
   name: string;
   type: SpriteType;
@@ -26,6 +31,11 @@ export abstract class Sprite {
   verticalVelocity: number;
   isVisible: boolean;
   behaviors: Behavior[];
+  artist: Artist;
+  mockLeft?:number;
+  mockTop?:number;
+  mockWidth?:number;
+  mockHeight?:number;
   constructor(name, ctx, option) {
     this.name = name;
     this.ctx = ctx;
@@ -44,15 +54,15 @@ export abstract class Sprite {
   }
 
   /* 应用样式 */
-  protected applyStyle() {
+  public applyStyle() {
     let { ctx, fillStyle, lineWidth, strokeStyle, shadowOffsetX, shadowOffsetY, shadowBlur, shadowColor } = this;
     ctx.fillStyle = fillStyle;
     ctx.lineWidth = lineWidth;
     ctx.strokeStyle = strokeStyle;
-    ctx.shadowOffsetX = shadowOffsetX;
-    ctx.shadowOffsetY = shadowOffsetY;
-    ctx.shadowBlur = shadowBlur;
-    ctx.shadowColor = shadowColor;
+    // ctx.shadowOffsetX = shadowOffsetX;
+    // ctx.shadowOffsetY = shadowOffsetY;
+    // ctx.shadowBlur = shadowBlur;
+    // ctx.shadowColor = shadowColor;
   }
 
   /* 添加行为 */
@@ -68,7 +78,11 @@ export abstract class Sprite {
   }
 
   /* 绘制 */
-  public abstract draw(): void;
+  public draw() {
+    if (this.artist && typeof this.artist.draw === 'function') {
+      this.artist.draw(this);
+    }
+  }
 }
 
 /* 圆形精灵 */
@@ -87,18 +101,18 @@ export class CircleSprite extends Sprite {
     this.startAngle = options.startAngle || 0;
     this.endAngle = options.endAngle || Math.PI * 2;
     this.anticlockwise = options.anticlockwise || false;
-  }
-
-  /* 绘制 */
-  public draw() {
-    let { ctx, x, y, radius, startAngle, endAngle, anticlockwise } = this;
-    ctx.save();
-    this.applyStyle();
-    ctx.beginPath();
-    ctx.arc(x, y, radius, startAngle, endAngle, anticlockwise);
-    ctx.fill();
-    ctx.stroke();
-    ctx.restore();
+    this.artist = options.artist || {
+      draw: function(sprite: CircleSprite) {
+        let { ctx, x, y, radius, startAngle, endAngle, anticlockwise } = sprite;
+        ctx.save();
+        sprite.applyStyle();
+        ctx.beginPath();
+        ctx.arc(x, y, radius, startAngle, endAngle, anticlockwise);
+        ctx.fill();
+        ctx.stroke();
+        ctx.restore();
+      },
+    };
   }
 }
 
@@ -114,18 +128,18 @@ export class RectSprite extends Sprite {
     this.top = option.top || 0;
     this.width = option.width || 10;
     this.height = option.height || 10;
-  }
-
-  /* 绘制 */
-  public draw() {
-    let { ctx, left, top, width, height } = this;
-    ctx.save();
-    this.applyStyle();
-    ctx.beginPath();
-    ctx.rect(left, top, width, height);
-    ctx.fill();
-    ctx.stroke();
-    ctx.restore();
+    this.artist = option.artist || {
+      draw: function(sprite: RectSprite) {
+        let { ctx, left, top, width, height } = sprite;
+        ctx.save();
+        sprite.applyStyle();
+        ctx.beginPath();
+        ctx.rect(left, top, width, height);
+        ctx.fill();
+        ctx.stroke();
+        ctx.restore();
+      },
+    };
   }
 }
 
@@ -139,16 +153,25 @@ export class ImageSprite extends Sprite {
   isLoaded: boolean;
   isLoading: boolean;
   el: HTMLImageElement;
+  loadCallBack: (sprite: ImageSprite) => void;
   constructor(name, ctx, option) {
-    super(name, ctx, { ...option, type: SpriteType.Image });
+    super(name, ctx, { ...option, type: SpriteType.Image, isVisible: false });
     this.src = option.src;
     this.left = option.left || 0;
     this.top = option.top || 0;
-    this.width = option.width || 10;
-    this.height = option.height || 10;
     this.isLoaded = false;
     this.isLoading = false;
     this.el = document.createElement('img');
+    this.loadCallBack = option.loadCallBack;
+    this.artist = option.artist || {
+      draw: function(sprite: ImageSprite) {
+        let { ctx, el, left, top, width, height } = sprite;
+        ctx.save();
+        sprite.applyStyle();
+        ctx.drawImage(el, left, top, width, height);
+        ctx.restore();
+      },
+    };
     this.loadImage();
   }
 
@@ -158,8 +181,18 @@ export class ImageSprite extends Sprite {
       return;
     }
     let callback = () => {
+      this.isVisible = true;
       this.isLoaded = true;
       this.isLoading = false;
+      if (!this.width) {
+        this.width = this.el.width;
+      }
+      if (!this.height) {
+        this.height = this.el.height;
+      }
+      if (typeof this.loadCallBack === 'function') {
+        this.loadCallBack(this);
+      }
       if (typeof cb === 'function') {
         cb.call(this);
       }
@@ -175,9 +208,6 @@ export class ImageSprite extends Sprite {
     if (!this.isLoaded) {
       return this.loadImage(this.draw);
     }
-    let { ctx, el, left, top, width, height } = this;
-    ctx.save();
-    super.applyStyle();
-    ctx.drawImage(el, left, top, width, height);
+    super.draw();
   }
 }

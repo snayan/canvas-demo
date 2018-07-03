@@ -2,7 +2,7 @@
   "name": "canvas-demo",
   "version": "1.0.0",
   "description": "canvas demo ",
-  "main": "index.js",
+  "main": "index.ts",
   "scripts": {
     "build": " ts-node --project tsconfig.webpack.json script/build.ts",
     "start": " ts-node --project tsconfig.webpack.json script/start.ts",

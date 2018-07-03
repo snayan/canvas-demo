@@ -144,6 +144,12 @@ class TimeSystem {
     this.transducerStartTime = Date.now();
   }
 
+  /* 重置 */
+  public reset() {
+    this.elapsed = 0;
+    this.transducerStartTime = Date.now();
+  }
+
   /* 暂停 */
   public paused() {
     if (!this.isPaused) {

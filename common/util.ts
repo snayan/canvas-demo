@@ -77,3 +77,19 @@ export const isSupportPassive = (function() {
   storage.set(IS_SUPPORT_PASSIVE, isSupportPassive);
   return isSupportPassive;
 })();
+
+/* 保留小数位 */
+export function RoundDecimal(value: number, digital: number = 2) {
+  digital = Math.max(0, digital);
+  return Number(value.toFixed(digital));
+}
+
+/* 转换弧度为角度 */
+export function transToAngle(radian: number) {
+  return (180 * radian) / Math.PI;
+}
+
+/* 转换角度为弧度 */
+export function transToRadian(angle: number) {
+  return (Math.PI * angle) / 180;
+}
