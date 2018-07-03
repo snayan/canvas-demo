@@ -1,7 +1,7 @@
 /* render class */
 import { Base64 } from 'js-base64';
 import Canvas from '../canvas';
-import { isSingleModule } from '../util';
+import { isSingleModule, throttle } from '../util';
 import { LINK } from '../CONSTANT';
 import Github, { GitHubApiResult } from '../github';
 import browser from '../browser';
@@ -25,6 +25,7 @@ abstract class CommonRender {
     if (browser.mobile) {
       this.el.classList.add(styles.mobile);
     }
+    window.addEventListener('resize', throttle(this.render.bind(this), 100), false);
   }
 
   private loading() {
@@ -118,6 +119,7 @@ abstract class CommonRender {
 
   public async render() {
     let removeLoading = this.loading();
+    this.el.innerHTML = '';
     document.body.appendChild(this.el);
     if (this.isSingleModule) {
       this.el.classList.add(styles.single);

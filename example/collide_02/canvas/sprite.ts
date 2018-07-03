@@ -59,10 +59,6 @@ export abstract class Sprite {
     ctx.fillStyle = fillStyle;
     ctx.lineWidth = lineWidth;
     ctx.strokeStyle = strokeStyle;
-    // ctx.shadowOffsetX = shadowOffsetX;
-    // ctx.shadowOffsetY = shadowOffsetY;
-    // ctx.shadowBlur = shadowBlur;
-    // ctx.shadowColor = shadowColor;
   }
 
   /* 添加行为 */

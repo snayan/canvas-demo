@@ -1,12 +1,15 @@
 /* 游戏实例 */
 import { FONT } from 'common/CONSTANT';
-import { transToRadian, transToAngle, distance } from 'common/util';
+import browser from 'common/browser';
+import { transToRadian, transToAngle, distance, getQuery } from 'common/util';
 import Engine from './engine';
 import TimeSystem from './timeSystem';
 import { Sprite, ImageSprite, CircleSprite, RectSprite } from './sprite';
 import Collide from './collide';
 
 const G: number = 9.8;
+
+const query = getQuery();
 
 class Game extends Engine {
   private lastFrameTime: number; //最后一帧绘制的时间
@@ -35,6 +38,7 @@ class Game extends Engine {
   public lastMouseY: number; //鼠标最后移动的Y坐标
   public meterPerPixel: number; //一像素对应多少米
   public openDevDoor: boolean; //是否开启开发者后门
+  public hitMessage: string; //进球提示语
   constructor(name: string, ctx: CanvasRenderingContext2D) {
     super();
     this.lastFrameTime = 0;
@@ -45,8 +49,6 @@ class Game extends Engine {
     this.fps = 0;
     this.rate = 1;
     this.isDestroyed = true;
-    this.width = ctx.canvas.width;
-    this.height = ctx.canvas.height;
     this.sprites = [];
     this.score = 0;
     this.launchAngle = 0;
@@ -56,9 +58,8 @@ class Game extends Engine {
     this.isBallFlying = false;
     this.isHit = false;
     this.meterPerPixel = 0.02666666666666667;
-    this.openDevDoor = true;
-    this.timeSystem = new TimeSystem();
-    this.collide = new Collide(ctx.canvas);
+    this.openDevDoor = !!query.admin;
+    this.hitMessage = '好球';
   }
 
   /* 计算fps */
@@ -198,8 +199,8 @@ class Game extends Engine {
     let options = {
       left: 20,
       top: 20,
-      width: 140,
-      height: 50,
+      width: browser.pc ? 250 : 140,
+      height: browser.pc ? 100 : 50,
       fillStyle: 'rgba(242, 238, 234, 0.3)',
       strokeStyle: 'rgba(114, 64, 142, 0.3)',
       artist: {
@@ -372,7 +373,6 @@ class Game extends Engine {
     ctx.beginPath();
     for (let { x, y } of ballHistory.slice(0, ballHistory.length - 1)) {
       ctx.lineTo(x, y);
-      // ctx.arc(x, y, radius, 0, Math.PI * 2, anticlockwise);
       ctx.stroke();
     }
     ctx.restore();
@@ -381,10 +381,10 @@ class Game extends Engine {
   /* 绘制 */
   private draw() {
     this.drawBg();
-    this.drawFps();
     this.drawSprites();
     this.drawGuideWireLine();
     if (this.openDevDoor) {
+      this.drawFps();
       this.drawHorizontalLine();
       this.drawBallHistory();
     }
@@ -402,8 +402,13 @@ class Game extends Engine {
 
   /* 开始 */
   public start() {
+    let canvas = this.ctx.canvas;
     this.isDestroyed = false;
+    this.timeSystem = new TimeSystem();
+    this.collide = new Collide(canvas);
     this.timeSystem.start();
+    this.width = canvas.width;
+    this.height = canvas.height;
     this.createSprites();
     window.requestAnimationFrame(this.animate.bind(this));
   }
@@ -476,8 +481,20 @@ class Game extends Engine {
 
   /* 销毁 */
   public destroy() {
-    this.calculateFps = null;
     this.isDestroyed = true;
+    this.ballHistory = [];
+    this.sprites = [];
+    this.score = 0;
+    this.launchAngle = 0;
+    this.lastMouseX = 0;
+    this.lastMouseY = 0;
+    this.isLaunching = false;
+    this.isBallFlying = false;
+    this.isHit = false;
+    this.timeSystem = null;
+    this.collide = null;
+    this.ball = null;
+    this.bucket = null;
   }
 }
 
