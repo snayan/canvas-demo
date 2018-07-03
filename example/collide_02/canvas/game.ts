@@ -39,6 +39,7 @@ class Game extends Engine {
   public meterPerPixel: number; //一像素对应多少米
   public openDevDoor: boolean; //是否开启开发者后门
   public hitMessage: string; //进球提示语
+  public hitMessageOpacity: number; //提示语opacity
   constructor(name: string, ctx: CanvasRenderingContext2D) {
     super();
     this.lastFrameTime = 0;
@@ -60,6 +61,7 @@ class Game extends Engine {
     this.meterPerPixel = 0.02666666666666667;
     this.openDevDoor = !!query.admin;
     this.hitMessage = '好球';
+    this.hitMessageOpacity = 0;
   }
 
   /* 计算fps */
@@ -281,6 +283,7 @@ class Game extends Engine {
         console.log('good ball');
         this.score += 2;
         this.isHit = true;
+        this.hitMessageOpacity = 1;
       }
     }
     if (isBallFlying && collide.isBallOutCanvas(ball)) {
@@ -349,6 +352,22 @@ class Game extends Engine {
     }
   }
 
+  /* 绘制中球提示 */
+  private drawHitMessage() {
+    let { hitMessage, hitMessageOpacity, isHit, ctx, width, height, fps } = this;
+    if (hitMessageOpacity) {
+      ctx.save();
+      ctx.font = `${browser.pc ? 48 : 32}px sans-serif`;
+      ctx.textAlign = 'center';
+      ctx.globalAlpha = hitMessageOpacity;
+      ctx.fillStyle = 'rgb(38, 165, 40)';
+      ctx.fillText(hitMessage, width / 2, height / 4);
+      ctx.restore();
+      hitMessageOpacity -= 1 / fps;
+      this.hitMessageOpacity = Math.max(0, hitMessageOpacity);
+    }
+  }
+
   /* 绘制水平参考线*/
   private drawHorizontalLine() {
     let { bucket, ctx, width } = this;
@@ -383,6 +402,7 @@ class Game extends Engine {
     this.drawBg();
     this.drawSprites();
     this.drawGuideWireLine();
+    this.drawHitMessage();
     if (this.openDevDoor) {
       this.drawFps();
       this.drawHorizontalLine();
