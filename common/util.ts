@@ -7,7 +7,7 @@ export function getQuery() {
   if (!search) {
     return query;
   }
-  let reg = /\?(\w+)=(\w+)/g;
+  let reg = /[\?|&](\w+)=(\w+)/g;
   let matches = null;
   while ((matches = reg.exec(search))) {
     query[matches[1]] = matches[2];

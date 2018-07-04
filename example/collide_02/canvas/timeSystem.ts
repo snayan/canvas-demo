@@ -116,44 +116,55 @@ export class AnimationTimer extends StopWatch {
 class TimeSystem {
   private transducerStartTime: number;
   private elapsed: number;
+  public isStart: boolean;
   public isPaused: boolean;
   public transducer: (now: number) => number;
   constructor() {
     this.elapsed = 0;
     this.isPaused = false;
+    this.isStart = false;
     this.transducer = (elapsed: number) => elapsed;
     this.transducerStartTime = 0;
   }
 
   /* 计算已经流逝的时间  */
-  private calculateElapsed() {
+  private calculateElapsed(now: number) {
     let { transducerStartTime, transducer, isPaused } = this;
     if (!this.isPaused) {
-      let transducerElapsed = Date.now() - transducerStartTime;
+      let transducerElapsed = now - transducerStartTime;
       if (typeof transducer === 'function') {
         transducerElapsed = transducer(transducerElapsed);
       }
       this.elapsed += transducerElapsed;
-      this.transducerStartTime = Date.now();
+      this.transducerStartTime = now;
     }
   }
 
   /* 启动时间系统 */
-  public start() {
+  public start(now: number = Date.now()) {
+    if (now == undefined) {
+      now = Date.now();
+    }
     this.elapsed = 0;
-    this.transducerStartTime = Date.now();
+    this.isStart = true;
+
+    this.transducerStartTime = now;
   }
 
   /* 重置 */
   public reset() {
     this.elapsed = 0;
+    this.isStart = false;
     this.transducerStartTime = Date.now();
   }
 
   /* 暂停 */
-  public paused() {
+  public paused(now: number = Date.now()) {
+    if (now == undefined) {
+      now = Date.now();
+    }
     if (!this.isPaused) {
-      this.calculateElapsed();
+      this.calculateElapsed(now);
       this.isPaused = true;
     }
   }
@@ -166,12 +177,12 @@ class TimeSystem {
     }
   }
   /* 获取经过的时间 */
-  public getElapsed() {
+  public getElapsed(now: number = Date.now()) {
     let { transducerStartTime, transducer, isPaused } = this;
     if (this.isPaused) {
       return this.elapsed;
     }
-    let transducerElapsed = Date.now() - transducerStartTime;
+    let transducerElapsed = now - transducerStartTime;
     if (typeof transducer === 'function') {
       transducerElapsed = transducer(transducerElapsed);
     }
@@ -179,9 +190,9 @@ class TimeSystem {
   }
 
   /* 修改时间流逝传感器 */
-  public setTransducer(transducerFunction: (now: number) => number, duration?: number) {
+  public setTransducer(transducerFunction: (now: number) => number, duration?: number, now: number = Date.now()) {
     let { transducer } = this;
-    this.calculateElapsed();
+    this.calculateElapsed(now);
     this.transducer = transducerFunction;
     if (Number.isFinite(duration)) {
       setTimeout(this.setTransducer.bind(this, transducer), duration);

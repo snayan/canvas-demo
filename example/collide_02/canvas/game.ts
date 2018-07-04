@@ -59,7 +59,7 @@ class Game extends Engine {
     this.isBallFlying = false;
     this.isHit = false;
     this.meterPerPixel = 0.02666666666666667;
-    this.openDevDoor = !!query.admin;
+    this.openDevDoor = query.admin === '1';
     this.hitMessage = '好球';
     this.hitMessageOpacity = 0;
   }
@@ -426,7 +426,6 @@ class Game extends Engine {
     this.isDestroyed = false;
     this.timeSystem = new TimeSystem();
     this.collide = new Collide(canvas);
-    this.timeSystem.start();
     this.width = canvas.width;
     this.height = canvas.height;
     this.createSprites();
@@ -460,12 +459,12 @@ class Game extends Engine {
   }
 
   /* 暂停 */
-  public paused() {
+  public pause() {
     this.timeSystem.paused();
   }
 
   /* 恢复 */
-  public unPaused() {
+  public unPause() {
     this.timeSystem.unPaused();
   }
 
@@ -491,11 +490,13 @@ class Game extends Engine {
 
   /* 发射小球 */
   public launchBall() {
-    let { ball, isLaunching } = this;
+    let { ball, isLaunching, lastFrameTime } = this;
     if (isLaunching && ball) {
       this.isBallFlying = true;
       this.ballHistory = [];
       this.isHit = false;
+      this.timeSystem.reset();
+      this.timeSystem.start(lastFrameTime);
     }
   }
 

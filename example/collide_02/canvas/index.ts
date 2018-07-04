@@ -43,6 +43,19 @@ export default class CollideCanvas extends Canvas {
     }
   }
 
+  /* 暂停/恢复 */
+  private togglePause(e: KeyboardEvent) {
+    if (e.which === 80) {
+      // 按下p键
+      let { game } = this;
+      if (game.isPaused()) {
+        game.unPause();
+      } else {
+        game.pause();
+      }
+    }
+  }
+
   /* 监听事件 */
   private addEventListener() {
     let { el } = this;
@@ -66,6 +79,9 @@ export default class CollideCanvas extends Canvas {
     el.addEventListener(browser.pc ? 'mousemove' : 'touchmove', handleEvent(this.moving), false);
     el.addEventListener(browser.pc ? 'mouseup' : 'touchend', handleEvent(this.endMove), false);
     el.addEventListener(browser.pc ? 'mouseleave' : 'touchcancel', handleEvent(this.endMove), false);
+    if (browser.pc) {
+      document.addEventListener('keyup', this.togglePause.bind(this), false);
+    }
   }
 
   /* 渲染 */

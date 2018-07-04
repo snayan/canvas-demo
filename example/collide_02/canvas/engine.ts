@@ -12,10 +12,10 @@ abstract class Engine {
   public abstract start(): void;
 
   /* 暂停 */
-  public abstract paused(): void;
+  public abstract pause(): void;
 
   /* 恢复 */
-  public abstract unPaused(): void;
+  public abstract unPause(): void;
 
   /* 播放音乐 */
   public abstract playSound(): void;
