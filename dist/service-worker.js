@@ -15,7 +15,7 @@ importScripts("/canvas-demo/dist/workbox/workbox-v3.3.0/workbox-sw.js");
 workbox.setConfig({modulePathPrefix: "/canvas-demo/dist/workbox/workbox-v3.3.0"});
 
 importScripts(
-  "/canvas-demo/dist/workbox/precache-manifest.3717cef6d1213c40c970cf88b033e1cd.js"
+  "/canvas-demo/dist/workbox/precache-manifest.e506d64b36e41495d44e1c9b61e9f4b0.js"
 );
 
 workbox.skipWaiting();
