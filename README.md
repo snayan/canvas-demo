@@ -3,7 +3,7 @@
 
 **canvas demo仓库**主要是我自己在学习canvas时动手写的一些示例，没有使用其他任何前端框架，只专注于canvas。在学习的过程中，只有自己动手实现，才能更好的理解canvas中的相关知识点。
 
-demo预览地址：https://blog.snayan.com/canvas-demo/
+demo预览地址：https://snayan.github.io/canvas-demo/
 
 #### 主要知识点
 
