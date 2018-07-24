@@ -3,7 +3,7 @@ import { isSingleModule } from 'common/util';
 import AnimateCanvas from './canvas/animateCanvas';
 import TimeSysTem from './canvas/timeSystem';
 
-const moduleName = 'time';
+const moduleName = 'animate';
 
 export default class Time extends CommonRender {
   constructor() {

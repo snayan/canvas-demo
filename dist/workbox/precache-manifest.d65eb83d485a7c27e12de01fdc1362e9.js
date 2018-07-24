@@ -36,7 +36,7 @@ self.__precacheManifest = [
     "url": "/canvas-demo/dist/main.5ee2e9c3c33a579d432d.js"
   },
   {
-    "url": "/canvas-demo/dist/runtime.3a1469448e9738ec10fa.js"
+    "url": "/canvas-demo/dist/runtime.493522a5d62bc4afa228.js"
   },
   {
     "url": "/canvas-demo/dist/68.02392da00a245fac1804.js"
@@ -63,7 +63,7 @@ self.__precacheManifest = [
     "url": "/canvas-demo/dist/20.92bfea2d4e96269263b0.js"
   },
   {
-    "url": "/canvas-demo/dist/21.7e4c2505e2bf6a62d35f.js"
+    "url": "/canvas-demo/dist/21.24d193bcb6e4187169d7.js"
   },
   {
     "url": "/canvas-demo/dist/22.3e6c4c2c5064da86eadd.js"
@@ -348,7 +348,7 @@ self.__precacheManifest = [
     "url": "/canvas-demo/dist/3.44aea2c56adbfa04d422.js"
   },
   {
-    "url": "/canvas-demo/dist/2.ac6545ba60c18e14c403.js"
+    "url": "/canvas-demo/dist/2.846d250b9b1c4d78f9ac.js"
   },
   {
     "url": "/canvas-demo/dist/images/27.a50f7cd33127024c1fe90bb7e51fc8cc.jpg"
