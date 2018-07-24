@@ -25,7 +25,7 @@ abstract class CommonRender {
     if (browser.mobile) {
       this.el.classList.add(styles.mobile);
     }
-    window.addEventListener('resize', throttle(this.render.bind(this), 100), false);
+    // window.addEventListener('resize', throttle(this.render.bind(this), 100), false);
   }
 
   private loading() {
@@ -48,7 +48,7 @@ abstract class CommonRender {
     if (count > 0) {
       setTimeout(() => {
         let { width, height } = wrap.getBoundingClientRect();
-        let widthMax = width > height;
+        let widthMax = width > height * 2;
         let container = document.createElement('div');
         container.style.display = 'inline-block';
         if (widthMax) {

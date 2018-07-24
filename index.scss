@@ -144,3 +144,14 @@ code[class*='language-'] ::selection {
   border-radius: 0.3em;
   white-space: normal;
 }
+
+button {
+  border: none;
+  background: none;
+  &:active {
+    outline: none;
+  }
+  &:focus {
+    outline: none;
+  }
+}
