@@ -1,7 +1,6 @@
 import CommonRender from 'common/render';
 import { isSingleModule } from 'common/util';
 import AnimateCanvas from './canvas/animateCanvas';
-import TimeSysTem from './canvas/timeSystem';
 
 const moduleName = 'animate';
 
