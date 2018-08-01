@@ -1,0 +1,1 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[25],{QmmR:function(t,s,i){"use strict";i.r(s);s.default=class{constructor(t,s,i,h){this.value=t,this.x=s,this.y=i,this.alpha=h,this.gray=.98,this.count=0}drop(t,s){this.x+=t,this.y+=s+this.gray*this.count,this.count+=1/60}}}}]);

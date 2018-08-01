@@ -1,0 +1,1 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[46],{"4ZCd":function(e,s,t){"use strict";t.r(s);s.default=class{isPaused(){return this.timeSystem.isPaused}getGameTime(){return this.timeSystem.getElapsed()}}}}]);

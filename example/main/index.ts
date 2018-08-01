@@ -6,6 +6,7 @@ import Editor from '../editor';
 import Zoom from '../zoom';
 import Collide01 from '../collide_01';
 import Collide02 from '../collide_02';
+import Collide03 from '../collide_03';
 import Animate from '../animate';
 
 new Shape().render();
@@ -16,5 +17,6 @@ new Editor().render();
 new Zoom().render();
 new Collide01().render();
 new Collide02().render();
+new Collide03().render();
 let time = new Animate();
 time.render().then(() => time.createButton());
